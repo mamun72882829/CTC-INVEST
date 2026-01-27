@@ -122,7 +122,7 @@
 
                 <div id="walletDepSection">
                     <div class="bg-slate-900 p-6 rounded-3xl mb-8 relative overflow-hidden">
-                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-2">Admin Payment Number</p>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-2">Admin Personal Number</p>
                         <div class="flex justify-between items-center">
                             <span id="adminDisplayNum" class="font-black text-xl text-white tracking-widest">017XXXXXXXX</span>
                             <button onclick="copyNum()" class="bg-blue-600 text-white w-10 h-10 rounded-xl active:scale-90 transition"><i class="fa fa-copy text-sm"></i></button>
@@ -134,6 +134,7 @@
                             <option value="bKash">bKash</option>
                             <option value="Nagad">Nagad</option>
                         </select>
+                        <input type="tel" id="depSenderNum" placeholder="Sender Number (আপনার নাম্বার)" required class="w-full bg-slate-50 border-none rounded-2xl p-4 text-sm font-semibold outline-none focus:ring-2 ring-blue-500/20">
                         <input type="number" id="depAmount" placeholder="Amount (৳)" required class="w-full bg-slate-50 border-none rounded-2xl p-4 text-sm font-semibold outline-none focus:ring-2 ring-blue-500/20">
                         <input type="text" id="depTrx" placeholder="Transaction ID (TrxID)" required class="w-full bg-slate-50 border-none rounded-2xl p-4 text-sm font-semibold outline-none focus:ring-2 ring-blue-500/20">
                         <button type="submit" id="depBtn" class="w-full btn-primary py-5 shadow-xl shadow-blue-100 mt-4 text-sm uppercase tracking-widest">Submit Deposit</button>
@@ -160,29 +161,41 @@
         </div>
 
         <div id="account" class="page p-5">
-            <div class="bg-white rounded-[2.5rem] p-10 text-center shadow-sm border border-slate-100">
-                <div class="w-24 h-24 bg-slate-50 rounded-[2.5rem] flex items-center justify-center mx-auto mb-6 border border-slate-100 shadow-inner">
-                    <i class="fa fa-user-tie text-blue-600 text-4xl"></i>
+            <div class="bg-white rounded-[2.5rem] p-6 text-center shadow-sm border border-slate-100">
+                <div class="w-20 h-20 bg-slate-50 rounded-[2rem] flex items-center justify-center mx-auto mb-4 border border-slate-100 shadow-inner">
+                    <i class="fa fa-user-tie text-blue-600 text-3xl"></i>
                 </div>
-                <h2 id="accNameDisplay" class="font-black text-2xl text-slate-800 tracking-tight">Loading...</h2>
+                <h2 id="accNameDisplay" class="font-black text-xl text-slate-800 tracking-tight">Loading...</h2>
                 <div id="accPhone" class="inline-block mt-1 bg-slate-100 text-slate-500 px-4 py-1 rounded-full text-[10px] font-bold">ID: 01xxxxxxxxx</div>
                 
-                <div class="grid grid-cols-2 gap-4 mt-10">
-                    <div class="bg-slate-50 p-5 rounded-3xl border border-slate-100">
-                        <p class="text-[9px] font-black text-slate-400 uppercase mb-1">Total Assets</p>
-                        <p id="accBalance" class="text-blue-600 font-black text-lg">৳0.00</p>
+                <div class="grid grid-cols-2 gap-3 mt-6">
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                        <p class="text-[8px] font-black text-slate-400 uppercase mb-1">Total Assets</p>
+                        <p id="accBalance" class="text-blue-600 font-black text-base">৳0.00</p>
                     </div>
-                    <div class="bg-slate-50 p-5 rounded-3xl border border-slate-100">
-                        <p class="text-[9px] font-black text-slate-400 uppercase mb-1">Account Status</p>
-                        <p class="text-green-500 font-black text-lg italic">Verified</p>
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                        <p class="text-[8px] font-black text-slate-400 uppercase mb-1">Account Status</p>
+                        <p class="text-green-500 font-black text-base italic">Verified</p>
+                    </div>
+                </div>
+
+                <div class="mt-6 bg-blue-50 p-5 rounded-3xl border border-blue-100 text-left">
+                    <div class="flex justify-between items-center mb-2">
+                        <h4 class="font-black text-[10px] text-blue-800 uppercase tracking-widest">Refer & Earn</h4>
+                        <i class="fa fa-users text-blue-400"></i>
+                    </div>
+                    <p class="text-[10px] text-blue-600/70 font-semibold leading-tight mb-3">Share your link with friends to grow your network and earn rewards.</p>
+                    <div class="flex gap-2">
+                        <input type="text" id="referLinkInput" readonly class="flex-1 bg-white border-none rounded-xl px-4 py-2 text-[10px] font-bold text-slate-500 outline-none" value="https://ctc-invest.vercel.app/">
+                        <button onclick="copyReferLink()" class="bg-blue-600 text-white px-4 rounded-xl text-[10px] font-black hover:bg-blue-700 active:scale-95 transition">COPY</button>
                     </div>
                 </div>
                 
-                <div class="space-y-3 mt-8">
-                    <button onclick="openHistory()" class="w-full bg-blue-50 text-blue-700 py-5 rounded-2xl font-black text-xs flex items-center justify-center gap-3">
-                        <i class="fa fa-receipt text-base"></i> TRANSACTION RECORDS
+                <div class="space-y-2 mt-6">
+                    <button onclick="openHistory()" class="w-full bg-slate-50 text-slate-700 py-4 rounded-2xl font-black text-[10px] flex items-center justify-center gap-3 border border-slate-100">
+                        <i class="fa fa-receipt text-sm text-blue-600"></i> TRANSACTION RECORDS
                     </button>
-                    <button onclick="logout()" class="w-full bg-red-50 text-red-500 py-5 rounded-2xl font-black text-xs uppercase tracking-widest">Logout Account</button>
+                    <button onclick="logout()" class="w-full bg-red-50 text-red-500 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest border border-red-100">Logout Account</button>
                 </div>
             </div>
         </div>
@@ -235,6 +248,9 @@
             document.getElementById('authOverlay').style.display = 'none';
             document.getElementById('mainApp').style.display = 'block';
             document.getElementById('accPhone').innerText = "ID: " + phone;
+            
+            // Set referral link with User ID
+            document.getElementById('referLinkInput').value = "https://ctc-invest.vercel.app/?ref=" + phone;
 
             db.ref('appSettings/adminPhone').on('value', s => {
                 document.getElementById('adminDisplayNum').innerText = s.val() || "017XXXXXXXX";
@@ -256,6 +272,14 @@
                 renderPlansList();
                 renderTaskBlocks();
             });
+        }
+
+        function copyReferLink() {
+            const linkInput = document.getElementById('referLinkInput');
+            linkInput.select();
+            linkInput.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(linkInput.value);
+            alert("রেফার লিংক কপি করা হয়েছে!");
         }
 
         function openHistory() {
@@ -308,7 +332,6 @@
             }
         }
 
-        // --- Compact Grid Rendering for Plans (Updated with Daily Income) ---
         function renderPlansList() {
             const list = document.getElementById('planList');
             list.innerHTML = '';
@@ -316,7 +339,6 @@
             for(let key in activePlansData) {
                 const plan = activePlansData[key];
                 const isActive = myPlans.hasOwnProperty(key);
-                // Daily income calculation
                 const dailyIncome = plan.reward * plan.tasks;
 
                 list.innerHTML += `
@@ -388,6 +410,7 @@
             db.ref('deposits').push({
                 user: currentUser, 
                 method: document.getElementById('depMethod').value,
+                sender: document.getElementById('depSenderNum').value,
                 amount: parseInt(document.getElementById('depAmount').value),
                 trx: document.getElementById('depTrx').value, 
                 status: 'Pending', 
