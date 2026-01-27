@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CTC PRO - Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Outfit', sans-serif; background-color: #f1f5f9; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .sidebar-link.active { background: #2563eb; color: white; }
+    </style>
+</head>
+<body class="flex flex-col md:flex-row min-h-screen">
+
+    <div class="w-full md:w-64 bg-slate-900 text-white p-6">
+        <h1 class="font-black text-2xl italic mb-10 text-center">CTC <span class="text-blue-500">ADMIN</span></h1>
+        <nav class="space-y-2">
+            <button onclick="showTab('dashboard')" class="sidebar-link active w-full text-left p-3 rounded-xl transition flex items-center gap-3">
+                <i class="fa fa-chart-line"></i> Dashboard
+            </button>
+            <button onclick="showTab('deposits')" class="sidebar-link w-full text-left p-3 rounded-xl transition flex items-center gap-3">
+                <i class="fa fa-arrow-down"></i> Deposits
+            </button>
+            <button onclick="showTab('withdraws')" class="sidebar-link w-full text-left p-3 rounded-xl transition flex items-center gap-3">
+                <i class="fa fa-arrow-up"></i> Withdraws
+            </button>
+            <button onclick="showTab('users')" class="sidebar-link w-full text-left p-3 rounded-xl transition flex items-center gap-3">
+                <i class="fa fa-users"></i> Users
+            </button>
+            <button onclick="showTab('plans')" class="sidebar-link w-full text-left p-3 rounded-xl transition flex items-center gap-3">
+                <i class="fa fa-box"></i> Manage Plans
+            </button>
+            <button onclick="showTab('settings')" class="sidebar-link w-full text-left p-3 rounded-xl transition flex items-center gap-3">
+                <i class="fa fa-cog"></i> Settings
+            </button>
+        </nav>
+    </div>
+
+    <div class="flex-1 p-4 md:p-10">
+        
+        <div id="settings" class="tab-content">
+            <h2 class="text-2xl font-black mb-6 uppercase">App Settings</h2>
+            <div class="bg-white p-6 rounded-3xl shadow-sm max-w-md">
+                <label class="block text-sm font-bold mb-2">Admin Payment Number</label>
+                <input type="text" id="setAdminPhone" class="w-full p-3 bg-slate-50 border rounded-xl mb-4 outline-none">
+                <button onclick="updateSettings()" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold w-full">Update Settings</button>
+            </div>
+        </div>
+
+        <div id="dashboard" class="tab-content active">
+            <h2 class="text-2xl font-black mb-6 uppercase">Dashboard Overview</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-blue-600 text-white p-8 rounded-3xl shadow-lg">
+                    <p class="opacity-80 text-xs font-bold uppercase">Total Deposit Requests</p>
+                    <h3 id="statDep" class="text-4xl font-black mt-2">0</h3>
+                </div>
+                <div class="bg-orange-500 text-white p-8 rounded-3xl shadow-lg">
+                    <p class="opacity-80 text-xs font-bold uppercase">Total Withdraw Requests</p>
+                    <h3 id="statWit" class="text-4xl font-black mt-2">0</h3>
+                </div>
+                <div class="bg-emerald-600 text-white p-8 rounded-3xl shadow-lg">
+                    <p class="opacity-80 text-xs font-bold uppercase">Total Registered Users</p>
+                    <h3 id="statUsers" class="text-4xl font-black mt-2">0</h3>
+                </div>
+            </div>
+        </div>
+
+        <div id="deposits" class="tab-content">
+            <h2 class="text-2xl font-black mb-6 uppercase">Pending Deposits</h2>
+            <div class="overflow-x-auto bg-white rounded-3xl shadow-sm">
+                <table class="w-full text-left">
+                    <thead class="bg-slate-50 border-b">
+                        <tr>
+                            <th class="p-4">User</th>
+                            <th class="p-4">Amount</th>
+                            <th class="p-4">Method/Trx</th>
+                            <th class="p-4">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="depTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="withdraws" class="tab-content">
+            <h2 class="text-2xl font-black mb-6 uppercase">Pending Withdraws</h2>
+            <div class="overflow-x-auto bg-white rounded-3xl shadow-sm">
+                <table class="w-full text-left">
+                    <thead class="bg-slate-50 border-b">
+                        <tr>
+                            <th class="p-4">User</th>
+                            <th class="p-4">Amount</th>
+                            <th class="p-4">Number/Method</th>
+                            <th class="p-4">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="witTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="users" class="tab-content">
+            <h2 class="text-2xl font-black mb-6 uppercase">User Database</h2>
+            <div class="overflow-x-auto bg-white rounded-3xl shadow-sm">
+                <table class="w-full text-left">
+                    <thead class="bg-slate-50 border-b">
+                        <tr>
+                            <th class="p-4">Name</th>
+                            <th class="p-4">Phone</th>
+                            <th class="p-4">Balance</th>
+                            <th class="p-4">Edit Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="plans" class="tab-content">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-black uppercase">Investment Plans</h2>
+                <button onclick="togglePlanForm()" class="bg-blue-600 text-white px-6 py-2 rounded-xl font-bold">+ Add New Plan</button>
+            </div>
+            
+            <div id="planForm" class="hidden bg-white p-6 rounded-3xl shadow-sm mb-8 max-w-lg">
+                <div class="grid grid-cols-2 gap-4">
+                    <input type="text" id="pName" placeholder="Plan Name" class="p-3 bg-slate-50 border rounded-xl">
+                    <input type="number" id="pPrice" placeholder="Price" class="p-3 bg-slate-50 border rounded-xl">
+                    <input type="number" id="pReward" placeholder="Daily Task Reward" class="p-3 bg-slate-50 border rounded-xl">
+                    <input type="number" id="pTasks" placeholder="Number of Tasks" class="p-3 bg-slate-50 border rounded-xl">
+                    <input type="number" id="pValidity" placeholder="Validity (Days)" class="p-3 bg-slate-50 border rounded-xl">
+                </div>
+                <button onclick="savePlan()" class="bg-slate-900 text-white w-full py-3 mt-4 rounded-xl font-bold">Save Plan</button>
+            </div>
+
+            <div id="adminPlanList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        </div>
+
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDFVFzroN-XwJksvOxG79ln0vQd0xvqAs4",
+            authDomain: "ctc-coin.firebaseapp.com",
+            databaseURL: "https://ctc-coin-default-rtdb.firebaseio.com",
+            projectId: "ctc-coin",
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // Authentication (Simple Admin Check)
+        const pass = prompt("Enter Admin Password:");
+        if(pass !== "admin77") { alert("Wrong Password!"); document.body.innerHTML = "Access Denied"; }
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // --- Core Admin Functions ---
+
+        // Load Settings
+        db.ref('appSettings').on('value', s => {
+            const data = s.val() || {};
+            document.getElementById('setAdminPhone').value = data.adminPhone || "";
+        });
+
+        function updateSettings() {
+            const num = document.getElementById('setAdminPhone').value;
+            db.ref('appSettings').update({ adminPhone: num }).then(() => alert("Settings Updated!"));
+        }
+
+        // Manage Deposits
+        db.ref('deposits').on('value', s => {
+            const table = document.getElementById('depTable');
+            table.innerHTML = "";
+            let count = 0;
+            s.forEach(child => {
+                const d = child.val();
+                if(d.status === 'Pending') {
+                    count++;
+                    table.innerHTML += `
+                        <tr class="border-b">
+                            <td class="p-4 font-bold">${d.user}</td>
+                            <td class="p-4 text-blue-600 font-black">৳${d.amount}</td>
+                            <td class="p-4 text-sm">${d.method}<br><span class="text-xs text-slate-400">${d.trx}</span></td>
+                            <td class="p-4">
+                                <button onclick="approveDep('${child.key}', '${d.user}', ${d.amount})" class="bg-green-500 text-white px-3 py-1 rounded-lg text-xs mr-1">Approve</button>
+                                <button onclick="deleteReq('deposits', '${child.key}')" class="bg-red-500 text-white px-3 py-1 rounded-lg text-xs">Reject</button>
+                            </td>
+                        </tr>`;
+                }
+            });
+            document.getElementById('statDep').innerText = count;
+        });
+
+        function approveDep(key, phone, amt) {
+            db.ref('users/'+phone).once('value', s => {
+                const currentBal = s.val().balance || 0;
+                db.ref('users/'+phone).update({ balance: currentBal + amt });
+                db.ref('deposits/'+key).update({ status: 'Approved' }).then(() => alert("Approved!"));
+            });
+        }
+
+        // Manage Withdraws
+        db.ref('withdraws').on('value', s => {
+            const table = document.getElementById('witTable');
+            table.innerHTML = "";
+            let count = 0;
+            s.forEach(child => {
+                const d = child.val();
+                if(d.status === 'Pending') {
+                    count++;
+                    table.innerHTML += `
+                        <tr class="border-b">
+                            <td class="p-4 font-bold">${d.user}</td>
+                            <td class="p-4 text-orange-600 font-black">৳${d.amount}</td>
+                            <td class="p-4 text-sm">${d.number}<br><span class="text-xs text-slate-400">${d.method}</span></td>
+                            <td class="p-4">
+                                <button onclick="approveWit('${child.key}')" class="bg-green-500 text-white px-3 py-1 rounded-lg text-xs mr-1">Paid</button>
+                                <button onclick="rejectWit('${child.key}', '${d.user}', ${d.amount})" class="bg-red-500 text-white px-3 py-1 rounded-lg text-xs">Reject</button>
+                            </td>
+                        </tr>`;
+                }
+            });
+            document.getElementById('statWit').innerText = count;
+        });
+
+        function approveWit(key) {
+            db.ref('withdraws/'+key).update({ status: 'Approved' }).then(() => alert("Marked as Paid!"));
+        }
+
+        function rejectWit(key, phone, amt) {
+            db.ref('users/'+phone).once('value', s => {
+                const currentBal = s.val().balance || 0;
+                db.ref('users/'+phone).update({ balance: currentBal + amt }); // Refund
+                db.ref('withdraws/'+key).remove();
+                alert("Rejected & Refunded!");
+            });
+        }
+
+        // User Management
+        db.ref('users').on('value', s => {
+            const table = document.getElementById('userTable');
+            table.innerHTML = "";
+            document.getElementById('statUsers').innerText = s.numChildren();
+            s.forEach(child => {
+                const u = child.val();
+                table.innerHTML += `
+                    <tr class="border-b">
+                        <td class="p-4 font-bold">${u.name}</td>
+                        <td class="p-4">${u.phone}</td>
+                        <td class="p-4 font-black">৳${(u.balance || 0).toFixed(2)}</td>
+                        <td class="p-4">
+                            <button onclick="editBalance('${u.phone}', ${u.balance || 0})" class="bg-slate-900 text-white px-4 py-1 rounded-lg text-xs">Edit</button>
+                        </td>
+                    </tr>`;
+            });
+        });
+
+        function editBalance(phone, oldBal) {
+            const newBal = prompt("Enter New Balance:", oldBal);
+            if(newBal !== null) {
+                db.ref('users/'+phone).update({ balance: parseFloat(newBal) });
+            }
+        }
+
+        // Plan Management
+        function togglePlanForm() { document.getElementById('planForm').classList.toggle('hidden'); }
+
+        function savePlan() {
+            const planData = {
+                name: document.getElementById('pName').value,
+                price: parseInt(document.getElementById('pPrice').value),
+                reward: parseInt(document.getElementById('pReward').value),
+                tasks: parseInt(document.getElementById('pTasks').value),
+                validity: parseInt(document.getElementById('pValidity').value)
+            };
+            db.ref('plans').push(planData).then(() => {
+                alert("Plan Added!");
+                togglePlanForm();
+            });
+        }
+
+        db.ref('plans').on('value', s => {
+            const list = document.getElementById('adminPlanList');
+            list.innerHTML = "";
+            s.forEach(child => {
+                const p = child.val();
+                list.innerHTML += `
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
+                        <h4 class="font-black text-blue-600 uppercase text-sm">${p.name}</h4>
+                        <p class="text-2xl font-black mt-2">৳${p.price}</p>
+                        <div class="mt-4 text-xs space-y-1 font-bold text-slate-500">
+                            <p>Daily Task: ${p.tasks}</p>
+                            <p>Reward/Task: ৳${p.reward}</p>
+                            <p>Validity: ${p.validity} Days</p>
+                        </div>
+                        <button onclick="deleteReq('plans', '${child.key}')" class="w-full mt-4 bg-red-50 text-red-500 py-2 rounded-xl text-xs font-bold uppercase">Delete Plan</button>
+                    </div>`;
+            });
+        });
+
+        function deleteReq(path, key) {
+            if(confirm("Are you sure?")) db.ref(path+'/'+key).remove();
+        }
+    </script>
+</body>
+</html>
