@@ -117,7 +117,7 @@
 
                 <div id="walletDepSection">
                     <div class="bg-slate-900 p-6 rounded-3xl mb-8 relative overflow-hidden">
-                        <p class="text-[10px] font-bold text-slate-400 uppercase mb-2">Admin Payment Number</p>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase mb-2">Admin Personal Number</p>
                         <div class="flex justify-between items-center">
                             <span id="adminDisplayNum" class="font-black text-xl text-white tracking-widest">017XXXXXXXX</span>
                             <button onclick="copyNum()" class="bg-blue-600 text-white w-10 h-10 rounded-xl"><i class="fa fa-copy text-sm"></i></button>
@@ -284,7 +284,6 @@
             });
         }
 
-        // Home Plans
         function renderPlansList() {
             const list = document.getElementById('planList');
             list.innerHTML = '';
@@ -337,7 +336,6 @@
             });
         }
 
-        // Deposit Function
         async function submitDeposit(e) {
             e.preventDefault();
             const btn = document.getElementById('depBtn');
@@ -370,7 +368,6 @@
             }
         }
 
-        // Withdraw Function
         async function submitWithdraw(e) {
             e.preventDefault();
             const amt = parseInt(document.getElementById('witAmount').value);
@@ -434,7 +431,6 @@
             db.ref('users/'+currentUser).update({ balance: (userData.balance || 0) + reward, myPlans: upPlans, lastTaskTime: Date.now() });
         }
 
-        // --- FIXED RECORDS LOGIC ---
         async function openHistory() {
             document.getElementById('historyOverlay').style.display = 'block';
             const list = document.getElementById('historyList');
@@ -442,20 +438,10 @@
             
             try {
                 let records = [];
-                
-                // Fetch Deposits
                 const depSnap = await db.ref('deposits').orderByChild('user').equalTo(currentUser).once('value');
-                depSnap.forEach(child => {
-                    records.push({ ...child.val(), type: 'Deposit' });
-                });
-
-                // Fetch Withdraws
+                depSnap.forEach(child => { records.push({ ...child.val(), type: 'Deposit' }); });
                 const witSnap = await db.ref('withdraws').orderByChild('user').equalTo(currentUser).once('value');
-                witSnap.forEach(child => {
-                    records.push({ ...child.val(), type: 'Withdraw' });
-                });
-
-                // Sort by time (Newest first)
+                witSnap.forEach(child => { records.push({ ...child.val(), type: 'Withdraw' }); });
                 records.sort((a, b) => new Date(b.time) - new Date(a.time));
 
                 if (records.length === 0) {
@@ -480,10 +466,7 @@
                         </span>
                     </div>
                 `).join('');
-
-            } catch (error) {
-                list.innerHTML = '<p class="text-center py-20 text-red-400">Error loading data.</p>';
-            }
+            } catch (error) { list.innerHTML = '<p class="text-center py-20 text-red-400">Error loading data.</p>'; }
         }
 
         function checkAndResetTasks() {
