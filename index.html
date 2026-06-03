@@ -7,57 +7,81 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        body { font-family: 'Outfit', sans-serif; background-color: #f8fafc; }
+        body { 
+            font-family: 'Outfit', sans-serif; 
+            background-color: #0b0b0d; 
+        }
         .page { display: none; }
         .page.active { display: block; animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        .nav-active { color: #2563eb !important; position: relative; }
-        .nav-active::after { content: ''; position: absolute; top: -12px; width: 25px; height: 4px; background: #2563eb; border-radius: 0 0 10px 10px; }
+        .nav-active { color: #f59e0b !important; }
         
-        .plan-card { background: white; border-radius: 1.5rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 15px -5px rgba(0, 0, 0, 0.05); transition: transform 0.2s; display: flex; flex-direction: column; justify-content: space-between; }
-        .plan-card:active { transform: scale(0.98); }
+        .gold-card { 
+            background: #171512; 
+            border: 1px solid #2e261d; 
+            border-radius: 1.2rem;
+            transition: transform 0.2s;
+        }
+        .gold-card:active { transform: scale(0.98); }
         
-        #authOverlay, #historyOverlay { position: fixed; inset: 0; background: #fff; z-index: 1000; display: none; overflow-y: auto; }
-        .btn-primary { background: linear-gradient(135deg, #2563eb, #1e40af); color: white; border-radius: 1.2rem; font-weight: 700; transition: all 0.3s; }
+        #authOverlay, #historyOverlay { 
+            position: fixed; 
+            inset: 0; 
+            background: #0b0b0d; 
+            z-index: 1000; 
+            display: none; 
+            overflow-y: auto; 
+        }
         
-        .reward-tag { background: #eff6ff; color: #2563eb; padding: 2px 6px; border-radius: 6px; font-size: 8px; font-weight: 700; border: 1px solid #dbeafe; }
-        .validity-tag { background: #fff7ed; color: #ea580c; padding: 2px 6px; border-radius: 6px; font-size: 8px; font-weight: 700; border: 1px solid #ffedd5; }
+        .btn-primary { 
+            background: linear-gradient(135deg, #c29438, #8a641a); 
+            color: white; 
+            border-radius: 1rem; 
+            font-weight: 700; 
+            transition: all 0.3s; 
+            border: 1px solid #dfb76c;
+        }
+        .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
         
-        .wallet-tab { padding: 12px; font-weight: 700; font-size: 14px; color: #94a3b8; cursor: pointer; transition: all 0.3s; border-radius: 1rem; flex: 1; text-align: center; }
-        .wallet-tab.active { color: #2563eb; background: #eff6ff; }
+        .reward-tag { background: #261f13; color: #f59e0b; padding: 2px 8px; border-radius: 8px; font-size: 10px; font-weight: 700; border: 1px solid #4a3b21; }
+        .validity-tag { background: #1c1917; color: #a8a29e; padding: 2px 8px; border-radius: 8px; font-size: 10px; font-weight: 700; border: 1px solid #292524; }
         
-        .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .wallet-tab { padding: 12px 24px; font-weight: 700; font-size: 15px; color: #78716c; cursor: pointer; transition: all 0.3s; border-radius: 1rem; }
+        .wallet-tab.active { color: #f59e0b; background: #261f13; border: 1px solid #4a3b21; }
+        
+        .glass { background: rgba(17, 17, 19, 0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        input, select { background-color: #171512 !important; border: 1px solid #2e261d !important; color: white !important; }
+        input::placeholder { color: #6b6661; }
     </style>
 </head>
-<body class="pb-24 text-slate-900">
+<body class="pb-28 text-stone-200">
 
     <div id="authOverlay">
         <div class="p-8 flex flex-col min-h-screen justify-center max-w-md mx-auto">
             <div class="text-center mb-12">
-                <div class="bg-blue-600 w-20 h-20 rounded-[2rem] flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-blue-200 rotate-12">
-                    <i class="fa fa-bolt text-white text-4xl -rotate-12"></i>
+                <div class="bg-gradient-to-br from-amber-400 to-amber-700 w-24 h-24 rounded-[2.5rem] flex items-center justify-center mx-auto mb-6 shadow-2xl rotate-12">
+                    <i class="fa fa-bolt text-white text-5xl -rotate-12"></i>
                 </div>
-                <h2 id="authTitle" class="font-black text-3xl tracking-tighter text-slate-800 uppercase">Login To CTC</h2>
-                <p class="text-slate-400 mt-2 text-sm font-medium">Start your investment journey</p>
+                <h2 id="authTitle" class="font-black text-4xl tracking-tighter text-amber-500 uppercase">Login To CTC</h2>
+                <p class="text-stone-400 mt-2 font-medium">Start your investment journey</p>
             </div>
             <form id="authForm" class="space-y-4">
-                <input type="text" id="authName" placeholder="Full Name" class="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 text-sm outline-none focus:ring-2 ring-blue-500/20 hidden">
+                <input type="text" id="authName" placeholder="Full Name" class="w-full rounded-2xl p-4 text-sm outline-none focus:ring-2 ring-amber-500/20 hidden">
                 <div class="relative">
-                    <i class="fa fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                    <input type="tel" id="authPhone" placeholder="Phone Number" required class="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 pl-12 text-sm outline-none">
+                    <i class="fa fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-stone-500"></i>
+                    <input type="tel" id="authPhone" placeholder="Phone Number" required class="w-full rounded-2xl p-4 pl-12 text-sm outline-none focus:ring-2 ring-amber-500/20">
                 </div>
                 <div class="relative">
-                    <i class="fa fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                    <input type="password" id="authPassword" placeholder="Password" required class="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 pl-12 text-sm outline-none">
+                    <i class="fa fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-stone-500"></i>
+                    <input type="password" id="authPassword" placeholder="Password" required class="w-full rounded-2xl p-4 pl-12 text-sm outline-none focus:ring-2 ring-amber-500/20">
                 </div>
-                <button type="submit" id="authBtn" class="w-full btn-primary py-4 shadow-xl shadow-blue-100 mt-6 uppercase tracking-widest">Login</button>
+                <button type="submit" id="authBtn" class="w-full btn-primary py-5 shadow-2xl mt-6 text-lg uppercase tracking-wider">Login</button>
             </form>
-            <p class="text-center mt-10 text-sm font-semibold text-slate-500">
+            <p class="text-center mt-10 text-sm font-semibold text-stone-500">
                 <span id="toggleText">Don't have an account?</span> 
-                <button onclick="toggleAuthMode()" id="authToggleBtn" class="text-blue-600 font-extrabold ml-1">Sign Up</button>
+                <button onclick="toggleAuthMode()" id="authToggleBtn" class="text-amber-500 font-extrabold ml-1">Sign Up</button>
             </p>
         </div>
     </div>
@@ -65,169 +89,204 @@
     <div id="historyOverlay">
         <div class="p-6 max-w-md mx-auto">
             <div class="flex justify-between items-center mb-8">
-                <h2 class="font-black text-2xl tracking-tight">Transaction Logs</h2>
-                <button onclick="closeHistory()" class="bg-slate-100 w-10 h-10 rounded-full flex items-center justify-center text-slate-500"><i class="fa fa-times"></i></button>
+                <h2 class="font-black text-2xl tracking-tight text-amber-500">Transaction Logs</h2>
+                <button onclick="closeHistory()" class="bg-stone-800 w-10 h-10 rounded-full flex items-center justify-center text-stone-400"><i class="fa fa-times"></i></button>
             </div>
             <div class="space-y-4" id="historyList"></div>
         </div>
     </div>
 
     <div id="mainApp" style="display:none;">
-        <div class="glass p-4 sticky top-0 z-50 flex justify-between items-center px-6 border-b border-slate-100">
+        
+        <div class="bg-gradient-to-b from-amber-400 via-amber-500 to-amber-600 p-4 sticky top-0 z-50 flex justify-between items-center px-6 shadow-xl">
             <div class="flex items-center gap-3">
-                <div class="bg-blue-600 p-2 rounded-xl shadow-lg shadow-blue-200"><i class="fa fa-bolt text-white text-xs"></i></div>
-                <h1 class="font-black text-slate-800 text-2xl italic tracking-tighter">CTC <span class="text-blue-600">PRO</span></h1>
+                <div class="bg-stone-950 p-2 rounded-xl shadow-md"><i class="fa fa-bolt text-amber-400 text-xs"></i></div>
+                <h1 class="font-black text-stone-950 text-2xl italic tracking-tighter">CTC <span class="text-stone-900 opacity-80">PRO</span></h1>
             </div>
-            <div class="bg-blue-600 px-4 py-2.5 rounded-2xl shadow-lg shadow-blue-100">
-                <span id="userBalance" class="text-sm font-black text-white">৳0.00</span>
+            <div class="flex items-center gap-3">
+                <div class="bg-stone-950 px-4 py-2 rounded-2xl border border-amber-400/30">
+                    <span id="userBalance" class="text-sm font-black text-amber-400">৳0.00</span>
+                </div>
+                <div class="w-9 h-9 rounded-full border-2 border-stone-950 bg-amber-200 overflow-hidden flex items-center justify-center">
+                    <i class="fa fa-user text-stone-950 text-lg mt-1"></i>
+                </div>
             </div>
         </div>
 
         <div id="home" class="page active p-4">
-            <div class="rounded-[2rem] bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 p-6 text-white shadow-2xl shadow-blue-200 mb-8 relative overflow-hidden">
-                <div class="relative z-10">
-                    <h2 class="font-bold text-xl">Financial Freedom</h2>
-                    <p class="text-blue-100 text-[9px] font-bold opacity-80 mt-1 uppercase tracking-[0.2em]">Premium Investment Core</p>
-                    <div class="mt-6 flex gap-3">
-                        <button onclick="showPage('deposit')" class="flex-1 bg-white text-blue-700 py-3 rounded-xl font-black text-[10px] shadow-xl">DEPOSIT</button>
-                        <button onclick="goToWithdraw()" class="flex-1 bg-white/10 border border-white/20 text-white py-3 rounded-xl font-black text-[10px]">WITHDRAW</button>
+            
+            <div class="relative w-full h-44 rounded-2xl overflow-hidden mb-4 bg-stone-900 border border-stone-800 flex items-center justify-center">
+                <div class="absolute inset-0 bg-cover bg-center opacity-40 filter blur-[1px]" style="background-image: url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=600&q=80');"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                
+                <button class="absolute left-3 text-stone-400 hover:text-white"><i class="fa fa-chevron-left text-xl"></i></button>
+                <div class="text-center relative z-10 px-6">
+                    <h2 class="text-3xl font-serif font-bold tracking-widest text-white drop-shadow-md">WEBSITE</h2>
+                    <p class="text-xs uppercase tracking-[0.3em] text-amber-400 font-semibold mt-1">New Website</p>
+                </div>
+                <button class="absolute right-3 text-stone-400 hover:text-white"><i class="fa fa-chevron-right text-xl"></i></button>
+            </div>
+
+            <div class="bg-gradient-to-r from-amber-500 to-amber-600 rounded-xl p-2.5 px-4 text-stone-950 font-bold text-xs flex items-center gap-2 mb-4 shadow-lg border border-amber-400">
+                <i class="fa fa-volume-high animate-pulse"></i>
+                <marquee scrollamount="4" class="font-extrabold uppercase tracking-wide">(WDR) DEVELOPER BY RAKIB</marquee>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 mb-6">
+                <button onclick="showPage('deposit', document.getElementById('nav-wallet'))" class="btn-primary py-3.5 rounded-xl font-black text-xs tracking-wider shadow-lg uppercase">Deposit Hub</button>
+                <button onclick="goToWithdraw()" class="bg-stone-900 border border-stone-800 text-amber-500 py-3.5 rounded-xl font-black text-xs tracking-wider active:scale-95 transition uppercase">Withdrawal</button>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 mb-6">
+                
+                <div class="space-y-3 flex flex-col justify-between">
+                    <div class="gold-card p-4 text-center flex flex-col items-center justify-center min-h-[110px]">
+                        <span class="text-xs font-bold text-stone-400 mb-2">Help Center</span>
+                        <div class="text-amber-500 text-3xl mb-1"><i class="fa fa-handshake"></i></div>
+                    </div>
+                    <div class="gold-card p-4 text-center flex flex-col items-center justify-center min-h-[110px]">
+                        <span class="text-xs font-bold text-stone-400 mb-2">Blog</span>
+                        <div class="text-amber-500 text-3xl mb-1"><i class="fa fa-globe"></i></div>
                     </div>
                 </div>
+
+                <div class="gold-card p-5 flex flex-col items-center justify-center text-center">
+                    <span class="text-xs font-bold text-stone-400 mb-4">Invite Friends</span>
+                    <div class="text-amber-500 text-5xl mb-3"><i class="fa fa-users"></i></div>
+                    <span class="text-[9px] text-amber-500/60 font-medium uppercase tracking-wider">Earn Referral Bonus</span>
+                </div>
+
+                <div class="gold-card p-4 text-center flex flex-col items-center justify-center min-h-[110px]">
+                    <span class="text-xs font-bold text-stone-400 mb-2">Video Tutorial</span>
+                    <div class="text-amber-500 text-3xl mb-1"><i class="fa fa-video"></i></div>
+                </div>
+                <div class="gold-card p-4 text-center flex flex-col items-center justify-center min-h-[110px]">
+                    <span class="text-xs font-bold text-stone-400 mb-2">About Us!</span>
+                    <div class="text-amber-500 text-3xl mb-1"><i class="fa fa-circle-info"></i></div>
+                </div>
             </div>
-            <h3 class="font-black text-slate-800 mb-4 ml-1 uppercase text-[10px] tracking-widest">Available Plans</h3>
+
+            <div class="w-full bg-gradient-to-r from-rose-400 via-pink-400 to-amber-200 rounded-2xl p-4 text-stone-900 flex items-center justify-between shadow-lg relative overflow-hidden mb-6">
+                <div class="z-10">
+                    <h4 class="font-black text-sm uppercase tracking-wider">Share & Reward</h4>
+                    <p class="text-[10px] font-bold opacity-80">Invite members to build premium circuit network</p>
+                </div>
+                <div class="text-3xl z-10 text-rose-600"><i class="fa fa-bullhorn animate-bounce"></i></div>
+                <div class="absolute -right-4 -bottom-4 w-20 h-20 bg-white/10 rounded-full blur-xl"></div>
+            </div>
+
+            <h3 class="font-black text-amber-500 mb-4 ml-1 uppercase text-xs tracking-widest border-l-2 border-amber-500 pl-2">Available Nodes</h3>
             <div id="planList" class="grid grid-cols-2 gap-3"></div>
         </div>
 
         <div id="tasks" class="page p-5">
-            <div class="bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100 mb-8 text-center">
-                <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-blue-600 text-2xl"><i class="fa fa-calendar-check"></i></div>
-                <h2 class="font-black text-slate-800 text-2xl tracking-tight">Work Station</h2>
-                <div class="mt-2 inline-flex items-center gap-2 bg-green-50 text-green-600 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider">Tasks Reset Every 24h</div>
+            <div class="gold-card p-8 shadow-sm text-center mb-8">
+                <div class="w-16 h-16 bg-amber-500/10 rounded-2xl flex items-center justify-center mx-auto mb-4 text-amber-500 text-2xl border border-amber-500/20">
+                    <i class="fa fa-calendar-check"></i>
+                </div>
+                <h2 class="font-black text-stone-200 text-2xl tracking-tight">Work Station</h2>
+                <div class="mt-2 inline-flex items-center gap-2 bg-amber-500/20 text-amber-400 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider border border-amber-500/30">Tasks Reset Every 24h</div>
             </div>
             <div id="taskBlocks" class="space-y-6"></div>
-            <p id="noTaskMsg" class="text-center text-slate-400 text-sm py-20 italic font-medium">No active plans found.</p>
+            <p id="noTaskMsg" class="text-center text-stone-500 text-sm py-20 italic font-medium">No active plans found.</p>
         </div>
 
         <div id="deposit" class="page p-5">
-            <div class="bg-white rounded-[2.5rem] p-6 shadow-sm border border-slate-100">
-                <div class="flex p-1.5 bg-slate-50 rounded-2xl mb-8">
-                    <div id="tabDep" onclick="toggleWalletTab('dep')" class="wallet-tab active">Deposit</div>
-                    <div id="tabWit" onclick="toggleWalletTab('wit')" class="wallet-tab">Withdraw</div>
+            <div class="gold-card p-6 shadow-sm">
+                <div class="flex p-1.5 bg-stone-900 rounded-2xl mb-8 border border-stone-800">
+                    <div id="tabDep" onclick="toggleWalletTab('dep')" class="wallet-tab flex-1 text-center active">Deposit</div>
+                    <div id="tabWit" onclick="toggleWalletTab('wit')" class="wallet-tab flex-1 text-center">Withdraw</div>
                 </div>
 
                 <div id="walletDepSection">
-                    <div class="bg-slate-900 p-6 rounded-3xl mb-8 relative overflow-hidden">
-                        <p class="text-[10px] font-bold text-slate-400 uppercase mb-2">Admin Personal Number</p>
+                    <div class="bg-stone-950 p-6 rounded-3xl mb-8 relative overflow-hidden border border-stone-800">
+                        <p class="text-[10px] font-bold text-stone-500 uppercase tracking-[0.2em] mb-2">Admin Payment Number</p>
                         <div class="flex justify-between items-center">
                             <span id="adminDisplayNum" class="font-black text-xl text-white tracking-widest">017XXXXXXXX</span>
-                            <button onclick="copyNum()" class="bg-blue-600 text-white w-10 h-10 rounded-xl"><i class="fa fa-copy text-sm"></i></button>
+                            <button onclick="copyNum()" class="bg-amber-600 text-white w-10 h-10 rounded-xl active:scale-90 transition"><i class="fa fa-copy text-sm"></i></button>
                         </div>
                     </div>
                     <form onsubmit="submitDeposit(event)" class="space-y-4">
-                        <select id="depMethod" required class="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 text-sm font-semibold outline-none">
-                            <option value="">Select Method</option>
+                        <select id="depMethod" required class="w-full rounded-2xl p-4 text-sm font-semibold outline-none focus:ring-2 ring-amber-500/20">
+                            <option value="">Choose Method (bKash/Nagad)</option>
                             <option value="bKash">bKash</option>
                             <option value="Nagad">Nagad</option>
                         </select>
-                        <input type="tel" id="depSenderNum" placeholder="Your Number" required class="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 text-sm font-semibold outline-none">
-                        <input type="number" id="depAmount" placeholder="Amount (৳)" required class="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 text-sm font-semibold outline-none">
-                        <input type="text" id="depTrx" placeholder="Transaction ID" required class="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 text-sm font-semibold outline-none">
-                        <button type="submit" id="depBtn" class="w-full btn-primary py-5 uppercase tracking-widest shadow-xl">Submit Deposit</button>
+                        <input type="number" id="depAmount" placeholder="Amount (৳)" required class="w-full rounded-2xl p-4 text-sm font-semibold outline-none focus:ring-2 ring-amber-500/20">
+                        <input type="text" id="depTrx" placeholder="Transaction ID (TrxID)" required class="w-full rounded-2xl p-4 text-sm font-semibold outline-none focus:ring-2 ring-amber-500/20">
+                        <button type="submit" id="depBtn" class="w-full btn-primary py-5 shadow-xl mt-4 text-sm uppercase tracking-widest">Submit Deposit</button>
                     </form>
                 </div>
 
                 <div id="walletWitSection" style="display: none;">
-                    <div class="bg-slate-800 p-7 rounded-[2rem] text-white mb-8 text-center">
-                        <p class="text-[10px] opacity-60 uppercase font-black">Withdrawable Assets</p>
-                        <h2 id="withdrawBalDisplay" class="text-4xl font-black">৳0.00</h2>
+                    <div class="bg-gradient-to-br from-stone-900 to-stone-950 p-7 rounded-[2rem] text-white mb-8 shadow-2xl border border-stone-800">
+                        <p class="text-[10px] opacity-60 uppercase font-black tracking-widest mb-1 text-stone-400">Withdrawable Balance</p>
+                        <h2 id="withdrawBalDisplay" class="text-4xl font-black tracking-tighter text-amber-500">৳0.00</h2>
                     </div>
                     <form onsubmit="submitWithdraw(event)" class="space-y-4">
-                        <select id="witMethod" required class="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 text-sm font-semibold outline-none">
-                            <option value="">Choose Receive Method</option>
+                        <select id="witMethod" required class="w-full rounded-2xl p-4 text-sm font-semibold outline-none">
+                            <option value="">Receive Via</option>
                             <option value="bKash">bKash</option>
                             <option value="Nagad">Nagad</option>
                         </select>
-                        <input type="tel" id="witPhone" placeholder="Receive Account Number" required class="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 text-sm font-semibold outline-none">
-                        <input type="number" id="witAmount" placeholder="Amount (৳)" required class="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 text-sm font-semibold outline-none">
-                        <button type="submit" id="witBtn" class="w-full btn-primary py-5 uppercase tracking-widest shadow-xl">Request Payout</button>
+                        <input type="tel" id="witPhone" placeholder="Account Number" required class="w-full rounded-2xl p-4 text-sm font-semibold outline-none focus:ring-2 ring-amber-500/20">
+                        <input type="number" id="witAmount" placeholder="Amount (৳)" required class="w-full rounded-2xl p-4 text-sm font-semibold outline-none focus:ring-2 ring-amber-500/20">
+                        <button type="submit" id="witBtn" class="w-full btn-primary py-5 shadow-xl mt-4 text-sm uppercase tracking-widest">Request Payment</button>
                     </form>
                 </div>
             </div>
         </div>
 
         <div id="account" class="page p-5">
-            <div class="bg-white rounded-[2.5rem] p-6 text-center shadow-sm border border-slate-100">
-                <div class="w-20 h-20 bg-slate-50 rounded-[2rem] flex items-center justify-center mx-auto mb-4 border border-slate-100 shadow-inner">
-                    <i class="fa fa-user-tie text-blue-600 text-3xl"></i>
+            <div class="gold-card p-10 text-center shadow-sm">
+                <div class="w-24 h-24 bg-stone-950 rounded-[2.5rem] flex items-center justify-center mx-auto mb-6 border border-amber-500/20 shadow-inner">
+                    <i class="fa fa-user-tie text-amber-500 text-4xl"></i>
                 </div>
-                <h2 id="accNameDisplay" class="font-black text-xl text-slate-800">User</h2>
-                <div id="accPhone" class="inline-block mt-1 bg-slate-100 text-slate-500 px-4 py-1 rounded-full text-[10px] font-bold">ID: 01xxxxxxxxx</div>
+                <h2 id="accNameDisplay" class="font-black text-2xl text-stone-200 tracking-tight">Loading...</h2>
+                <div id="accPhone" class="inline-block mt-1 bg-stone-900 text-stone-400 px-4 py-1 rounded-full text-[10px] font-bold border border-stone-800">ID: 01xxxxxxxxx</div>
                 
-                <div class="grid grid-cols-2 gap-3 mt-6 text-left">
-                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                        <p class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Balance</p>
-                        <p id="accBalance" class="text-blue-600 font-black">৳0.00</p>
+                <div class="grid grid-cols-2 gap-4 mt-10">
+                    <div class="bg-stone-900 p-5 rounded-3xl border border-stone-800">
+                        <p class="text-[9px] font-black text-stone-500 uppercase mb-1">Total Assets</p>
+                        <p id="accBalance" class="text-amber-500 font-black text-lg">৳0.00</p>
                     </div>
-                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                        <p class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Status</p>
-                        <p class="text-green-500 font-black italic">Active</p>
-                    </div>
-                </div>
-
-                <div class="mt-8 text-left bg-gradient-to-r from-slate-50 to-white p-6 rounded-[2rem] border border-slate-100">
-                    <h3 class="font-black text-blue-600 text-[10px] uppercase tracking-widest mb-3 italic">Why Invest with CTC PRO?</h3>
-                    <p class="text-[11px] text-slate-600 leading-relaxed font-medium">
-                        CTC PRO একটি বিশ্বস্ত ইনভেস্টমেন্ট প্ল্যাটফর্ম যা আপনার অলস অর্থকে সম্পদে রূপান্তর করতে সাহায্য করে। আমাদের লক্ষ্য হলো সাধারণ মানুষকে প্যাসিভ ইনকামের সুযোগ করে দেওয়া। 
-                    </p>
-                    <ul class="mt-4 space-y-2">
-                        <li class="flex items-center gap-2 text-[10px] font-bold text-slate-700">
-                            <i class="fa fa-shield-check text-blue-500"></i> ১০০% নিরাপদ ও স্বচ্ছ লেনদেন
-                        </li>
-                        <li class="flex items-center gap-2 text-[10px] font-bold text-slate-700">
-                            <i class="fa fa-rocket text-blue-500"></i> দ্রুত উইথড্র সুবিধা
-                        </li>
-                        <li class="flex items-center gap-2 text-[10px] font-bold text-slate-700">
-                            <i class="fa fa-headset text-blue-500"></i> ২৪/৭ এডমিন সাপোর্ট
-                        </li>
-                    </ul>
-                    <p class="mt-4 text-[10px] text-blue-700 font-black bg-blue-50 p-3 rounded-xl border border-dashed border-blue-200">
-                        "আজকের ছোট ইনভেস্টমেন্ট, আপনার আগামীর উজ্জ্বল ভবিষ্যৎ নিশ্চিত করবে। এখনই শুরু করুন!"
-                    </p>
-                </div>
-
-                <div class="mt-6 bg-blue-50 p-5 rounded-[2rem] border border-blue-100 text-left">
-                    <p class="text-[10px] text-blue-800 font-black uppercase mb-2">Refer & Earn</p>
-                    <div class="flex gap-2">
-                        <input type="text" id="referLinkInput" readonly class="flex-1 bg-white border border-blue-100 rounded-xl px-4 py-2 text-[10px] font-bold text-slate-500 outline-none">
-                        <button onclick="copyReferLink()" class="bg-blue-600 text-white px-4 rounded-xl text-[10px] font-black">COPY</button>
+                    <div class="bg-stone-900 p-5 rounded-3xl border border-stone-800">
+                        <p class="text-[9px] font-black text-stone-500 uppercase mb-1">Account Status</p>
+                        <p class="text-green-500 font-black text-lg italic">Verified</p>
                     </div>
                 </div>
                 
-                <div class="space-y-2 mt-6">
-                    <button onclick="openHistory()" class="w-full bg-slate-50 text-slate-700 py-4 rounded-2xl font-black text-[10px] flex items-center justify-center gap-3 border border-slate-100 uppercase">
-                        <i class="fa fa-receipt text-sm text-blue-600"></i> Records
+                <div class="space-y-3 mt-8">
+                    <button onclick="openHistory()" class="w-full bg-amber-500/10 text-amber-400 py-5 rounded-2xl font-black text-xs flex items-center justify-center gap-3 border border-amber-500/20">
+                        <i class="fa fa-receipt text-base"></i> TRANSACTION RECORDS
                     </button>
-                    <button onclick="logout()" class="w-full bg-red-50 text-red-500 py-4 rounded-2xl font-black text-[10px] uppercase border border-red-100">Sign Out</button>
+                    <button onclick="logout()" class="w-full bg-stone-900 text-rose-500 py-5 rounded-2xl font-black text-xs uppercase tracking-widest border border-stone-800">Logout Account</button>
                 </div>
             </div>
         </div>
 
-        <div class="fixed bottom-0 w-full glass flex justify-around py-5 border-t border-slate-100 z-50 rounded-t-[2rem]">
-            <button id="nav-home" onclick="showPage('home', this)" class="nav-btn nav-active flex flex-col items-center gap-1.5 w-16">
-                <i class="fa fa-home-alt text-xl"></i>
-                <span class="text-[9px] font-black uppercase">Home</span>
+        <div class="fixed bottom-0 w-full glass flex justify-around items-center py-4 border-t border-amber-500/20 z-50 rounded-t-[2rem] px-2 shadow-[0_-10px_25px_rgba(0,0,0,0.5)]">
+            <button id="nav-home" onclick="showPage('home', this)" class="nav-btn nav-active flex flex-col items-center gap-1 transition-all w-14 text-stone-500">
+                <i class="fa fa-house text-lg"></i>
+                <span class="text-[10px] font-bold uppercase tracking-tight">Home</span>
             </button>
-            <button id="nav-tasks" onclick="showPage('tasks', this)" class="nav-btn text-slate-300 flex flex-col items-center gap-1.5 w-16">
-                <i class="fa fa-bolt-lightning text-xl"></i>
-                <span class="text-[9px] font-black uppercase">Tasks</span>
+            <button id="nav-tasks" onclick="showPage('tasks', this)" class="nav-btn flex flex-col items-center gap-1 transition-all w-14 text-stone-500">
+                <i class="fa fa-gift text-lg"></i>
+                <span class="text-[10px] font-bold uppercase tracking-tight">Task</span>
             </button>
-            <button id="nav-wallet" onclick="showPage('deposit', this)" class="nav-btn text-slate-300 flex flex-col items-center gap-1.5 w-16">
-                <i class="fa fa-wallet text-xl"></i>
-                <span class="text-[9px] font-black uppercase">Wallet</span>
+            
+            <div onclick="showPage('home', document.getElementById('nav-home'))" class="relative -top-5 bg-gradient-to-b from-amber-300 via-amber-500 to-amber-700 w-14 h-14 rounded-full flex items-center justify-center border-4 border-stone-950 shadow-xl shadow-amber-900/40 active:scale-95 transition cursor-pointer">
+                <i class="fa fa-award text-stone-950 text-2xl"></i>
+                <div class="absolute -bottom-1 bg-red-600 text-white text-[7px] font-black px-1.5 py-0.5 rounded-full uppercase tracking-tighter scale-90 border border-stone-950">PRO</div>
+            </div>
+            
+            <button id="nav-wallet" onclick="showPage('deposit', this)" class="nav-btn flex flex-col items-center gap-1 transition-all w-14 text-stone-500">
+                <i class="fa fa-wallet text-lg"></i>
+                <span class="text-[10px] font-bold uppercase tracking-tight">Wallet</span>
             </button>
-            <button id="nav-account" onclick="showPage('account', this)" class="nav-btn text-slate-300 flex flex-col items-center gap-1.5 w-16">
-                <i class="fa fa-circle-user text-xl"></i>
-                <span class="text-[9px] font-black uppercase">Me</span>
+            <button id="nav-account" onclick="showPage('account', this)" class="nav-btn flex flex-col items-center gap-1 transition-all w-14 text-stone-500">
+                <i class="fa fa-circle-user text-lg"></i>
+                <span class="text-[10px] font-bold uppercase tracking-tight">Profile</span>
             </button>
         </div>
     </div>
@@ -260,7 +319,6 @@
             document.getElementById('authOverlay').style.display = 'none';
             document.getElementById('mainApp').style.display = 'block';
             document.getElementById('accPhone').innerText = "ID: " + phone;
-            document.getElementById('referLinkInput').value = "https://ctc-invest.vercel.app/?ref=" + phone;
 
             db.ref('appSettings/adminPhone').on('value', s => {
                 document.getElementById('adminDisplayNum').innerText = s.val() || "017XXXXXXXX";
@@ -273,15 +331,65 @@
 
             db.ref('users/'+phone).on('value', s => {
                 userData = s.val() || {};
-                const bal = (userData.balance || 0).toFixed(2);
-                document.getElementById('userBalance').innerText = `৳${bal}`;
-                document.getElementById('accBalance').innerText = `৳${bal}`;
-                document.getElementById('withdrawBalDisplay').innerText = `৳${bal}`;
-                document.getElementById('accNameDisplay').innerText = userData.name || "User";
+                const bal = `৳${(userData.balance || 0).toFixed(2)}`;
+                document.getElementById('userBalance').innerText = bal;
+                document.getElementById('accBalance').innerText = bal;
+                document.getElementById('withdrawBalDisplay').innerText = bal;
+                document.getElementById('accNameDisplay').innerText = userData.name || "User Name";
                 checkAndResetTasks();
                 renderPlansList();
                 renderTaskBlocks();
             });
+        }
+
+        function openHistory() {
+            document.getElementById('historyOverlay').style.display = 'block';
+            const list = document.getElementById('historyList');
+            list.innerHTML = '<div class="text-center py-10"><i class="fa fa-spinner fa-spin text-amber-500 text-3xl"></i></div>';
+            let records = [];
+            db.ref('deposits').orderByChild('user').equalTo(currentUser).once('value', s => {
+                s.forEach(child => { records.push({ ...child.val(), type: 'Deposit' }); });
+                db.ref('withdraws').orderByChild('user').equalTo(currentUser).once('value', sw => {
+                    sw.forEach(child => { records.push({ ...child.val(), type: 'Withdraw' }); });
+                    if(records.length === 0) {
+                        list.innerHTML = '<p class="text-center text-stone-500 italic py-10 font-medium">No records found.</p>';
+                    } else {
+                        records.sort((a, b) => new Date(b.time) - new Date(a.time));
+                        list.innerHTML = records.map(r => `
+                            <div class="bg-stone-900 p-5 rounded-[1.5rem] border border-stone-800 shadow-sm">
+                                <div class="flex justify-between items-start mb-2">
+                                    <span class="font-black text-xs uppercase ${r.type === 'Deposit' ? 'text-amber-500' : 'text-orange-500'}">${r.type}</span>
+                                    <span class="text-[9px] font-black px-3 py-1 rounded-full ${r.status === 'Pending' ? 'bg-amber-500/10 text-amber-400' : 'bg-green-500/10 text-green-400'}">${r.status.toUpperCase()}</span>
+                                </div>
+                                <div class="flex justify-between items-end">
+                                    <div>
+                                        <p class="text-[10px] text-stone-500 font-bold uppercase tracking-tighter">${r.time}</p>
+                                        <p class="text-[10px] text-stone-400 mt-1 font-semibold">${r.method} ${r.trx ? '• '+r.trx : ''}</p>
+                                    </div>
+                                    <p class="font-black text-xl text-stone-200">৳${r.amount}</p>
+                                </div>
+                            </div>
+                        `).join('');
+                    }
+                });
+            });
+        }
+
+        function closeHistory() { document.getElementById('historyOverlay').style.display = 'none'; }
+        function goToWithdraw() { showPage('deposit', document.getElementById('nav-wallet')); toggleWalletTab('wit'); }
+
+        function toggleWalletTab(type) {
+            if(type === 'dep') {
+                document.getElementById('walletDepSection').style.display = 'block';
+                document.getElementById('walletWitSection').style.display = 'none';
+                document.getElementById('tabDep').classList.add('active');
+                document.getElementById('tabWit').classList.remove('active');
+            } else {
+                document.getElementById('walletDepSection').style.display = 'none';
+                document.getElementById('walletWitSection').style.display = 'block';
+                document.getElementById('tabWit').classList.add('active');
+                document.getElementById('tabDep').classList.remove('active');
+            }
         }
 
         function renderPlansList() {
@@ -294,21 +402,23 @@
                 const dailyIncome = plan.reward * plan.tasks;
 
                 list.innerHTML += `
-                    <div class="plan-card p-4">
+                    <div class="gold-card p-4 flex flex-col justify-between">
                         <div>
-                            <span class="bg-blue-600 text-white text-[8px] px-2 py-0.5 rounded-full font-black uppercase mb-2 inline-block">${plan.name}</span>
-                            <div class="flex flex-col gap-1 mt-1">
-                                <span class="reward-tag w-max">Reward: ${plan.reward}TK</span>
-                                <span class="validity-tag w-max">${plan.validity || 30} Days</span>
+                            <span class="bg-amber-600 text-stone-950 text-[9px] px-3 py-1 rounded-full font-black uppercase tracking-wider mb-3 inline-block">${plan.name}</span>
+                            <div class="flex flex-wrap gap-1 mt-2">
+                                <span class="reward-tag">Each: ${plan.reward}TK</span>
+                                <span class="validity-tag">${plan.validity || 30}D</span>
                             </div>
-                            <div class="mt-3 text-[9px] font-bold text-slate-500">প্রতিদিন ইনকাম: <span class="text-blue-600">${dailyIncome}TK</span></div>
-                            <p class="text-xl font-black text-slate-800 tracking-tighter mt-1">৳${plan.price}</p>
-                            <p class="text-[7px] text-green-500 font-black mt-1 uppercase italic"><i class="fa fa-bolt"></i> ${plan.tasks} Tasks</p>
+                            <div class="mt-2 text-[11px] font-bold text-stone-400">
+                                <i class="fa fa-money-bill-wave text-amber-500 mr-1"></i>Daily: <span class="text-amber-500">${dailyIncome}TK</span>
+                            </div>
+                            <p class="text-2xl font-black text-stone-200 tracking-tighter mt-2">৳${plan.price}</p>
+                            <p class="text-[9px] text-amber-400 font-black mt-1 uppercase italic"><i class="fa fa-bolt"></i> ${plan.tasks} Tasks Daily</p>
                         </div>
                         <div class="mt-4">
                             ${isActive ? 
-                                `<button class="w-full bg-green-500 text-white py-2 rounded-xl text-[8px] font-black uppercase">ACTIVE</button>` : 
-                                `<button onclick="buyPlan('${key}')" class="w-full btn-primary py-2 text-[8px] uppercase">BUY</button>`
+                                `<button class="w-full bg-green-600 text-white py-2.5 rounded-xl text-[10px] font-black uppercase"><i class="fa fa-check"></i> Active</button>` : 
+                                `<button onclick="buyPlan('${key}')" class="w-full btn-primary py-2.5 text-[10px] uppercase tracking-wider">Buy Node</button>`
                             }
                         </div>
                     </div>`;
@@ -317,88 +427,12 @@
 
         function buyPlan(planKey) {
             const plan = activePlansData[planKey];
-            if(userData.balance < plan.price) return Swal.fire('Error', 'ব্যালেন্স নেই!', 'error');
-            
-            Swal.fire({
-                title: 'Confirm Purchase',
-                text: `${plan.name} প্ল্যানটি সচল করতে চান?`,
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#2563eb',
-                confirmButtonText: 'Yes, Buy it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const myPlans = userData.myPlans || {};
-                    myPlans[planKey] = { name: plan.name, tasks: plan.tasks, reward: plan.reward, completedToday: 0 };
-                    db.ref('users/'+currentUser).update({ balance: userData.balance - plan.price, myPlans: myPlans });
-                    Swal.fire('Success', 'প্ল্যান সচল হয়েছে!', 'success');
-                }
-            });
-        }
-
-        async function submitDeposit(e) {
-            e.preventDefault();
-            const btn = document.getElementById('depBtn');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Please Wait...';
-
-            try {
-                await db.ref('deposits').push({
-                    user: currentUser, 
-                    method: document.getElementById('depMethod').value,
-                    sender: document.getElementById('depSenderNum').value,
-                    amount: parseInt(document.getElementById('depAmount').value),
-                    trx: document.getElementById('depTrx').value, 
-                    status: 'Pending', 
-                    time: new Date().toLocaleString()
-                });
-                
-                Swal.fire({
-                    title: 'আবেদন জমা হয়েছে!',
-                    text: 'এডমিন আপনার পেমেন্ট চেক করে ব্যালেন্স যোগ করে দিবে। অনুগ্রহ করে অপেক্ষা করুন।',
-                    icon: 'success',
-                    confirmButtonColor: '#2563eb'
-                });
-                e.target.reset();
-            } catch (err) {
-                Swal.fire('Error', 'কিছু সমস্যা হয়েছে, আবার চেষ্টা করুন।', 'error');
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = 'Submit Deposit';
-            }
-        }
-
-        async function submitWithdraw(e) {
-            e.preventDefault();
-            const amt = parseInt(document.getElementById('witAmount').value);
-            if(amt > userData.balance) return Swal.fire('Error', 'আপনার ব্যালেন্স নেই!', 'error');
-            if(amt < 100) return Swal.fire('Error', 'মিনিমাম ১০০ টাকা উইথড্র!', 'warning');
-
-            const btn = document.getElementById('witBtn');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Processing...';
-
-            try {
-                await db.ref('withdraws').push({
-                    user: currentUser, amount: amt, 
-                    method: document.getElementById('witMethod').value,
-                    number: document.getElementById('witPhone').value, 
-                    status: 'Pending', time: new Date().toLocaleString()
-                });
-                await db.ref('users/'+currentUser).update({ balance: userData.balance - amt });
-                
-                Swal.fire({
-                    title: 'Withdraw Success!',
-                    text: 'আপনার উইথড্র রিকোয়েস্ট পেন্ডিং আছে। ২৪ ঘণ্টার মধ্যে পেমেন্ট পেয়ে যাবেন।',
-                    icon: 'success',
-                    confirmButtonColor: '#2563eb'
-                });
-                e.target.reset();
-            } catch (err) {
-                Swal.fire('Error', 'ব্যর্থ হয়েছে।', 'error');
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = 'Request Payout';
+            if(userData.balance < plan.price) return alert("অপ্রতুল ব্যালেন্স! আগে রিচার্জ করুন।");
+            if(confirm(`${plan.name} সচল করতে চান?`)) {
+                const myPlans = userData.myPlans || {};
+                myPlans[planKey] = { name: plan.name, tasks: plan.tasks, reward: plan.reward, completedToday: 0 };
+                db.ref('users/'+currentUser).update({ balance: userData.balance - plan.price, myPlans: myPlans });
+                alert("প্ল্যানটি সফলভাবে সচল হয়েছে!");
             }
         }
 
@@ -409,16 +443,16 @@
             document.getElementById('noTaskMsg').style.display = 'none';
             for(let key in userData.myPlans) {
                 const myPlan = userData.myPlans[key];
-                let blockHtml = `<div class="space-y-4"><h4 class="font-black text-[10px] text-blue-600 uppercase tracking-widest pl-2 border-l-4 border-blue-600">${myPlan.name}</h4>`;
+                let blockHtml = `<div class="space-y-4"><div class="flex items-center gap-2 px-2"><div class="w-1 h-4 bg-amber-500 rounded-full"></div><h3 class="font-black text-stone-400 uppercase text-xs tracking-widest">${myPlan.name}</h3></div>`;
                 for(let i=1; i<=myPlan.tasks; i++) {
                     const isDone = i <= (myPlan.completedToday || 0);
                     blockHtml += `
-                        <div class="bg-white p-5 rounded-[2rem] flex justify-between items-center border border-slate-50 ${isDone ? 'opacity-50' : 'shadow-sm'}">
+                        <div class="bg-stone-900 p-5 rounded-[2rem] flex justify-between items-center border border-stone-800 ${isDone ? 'opacity-40' : 'shadow-sm'}">
                             <div class="flex items-center gap-4">
-                                <div class="w-11 h-11 ${isDone ? 'bg-green-50 text-green-500' : 'bg-blue-50 text-blue-600'} rounded-2xl flex items-center justify-center"><i class="fa ${isDone ? 'fa-check-double' : 'fa-play text-xs'}"></i></div>
-                                <div><p class="font-black text-xs text-slate-700">Task 0${i}</p><p class="text-green-500 text-[10px] font-black">+ ৳${myPlan.reward}</p></div>
+                                <div class="w-12 h-12 ${isDone ? 'bg-green-500/10 text-green-500 border-green-500/20' : 'bg-amber-500/10 text-amber-500 border-amber-500/20'} rounded-2xl flex items-center justify-center border"><i class="fa ${isDone ? 'fa-check-double' : 'fa-play text-xs'}"></i></div>
+                                <div><p class="font-black text-sm text-stone-200">Daily Task 0${i}</p><p class="text-amber-400 text-[10px] font-black">+ ৳${myPlan.reward}</p></div>
                             </div>
-                            <button ${isDone ? 'disabled' : ''} onclick="claimSpecificTask('${key}', ${myPlan.reward})" class="${isDone ? 'bg-slate-100' : 'bg-slate-900 text-white'} px-6 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest">${isDone ? 'DONE' : 'CLAIM'}</button>
+                            <button ${isDone ? 'disabled' : ''} onclick="claimSpecificTask('${key}', ${myPlan.reward})" class="${isDone ? 'bg-stone-800 text-stone-500' : 'bg-amber-500 text-stone-950 font-bold shadow-xl'} px-6 py-2.5 rounded-xl text-[10px] uppercase tracking-widest transition-all">${isDone ? 'Finished' : 'Claim'}</button>
                         </div>`;
                 }
                 container.innerHTML += blockHtml + `</div>`;
@@ -431,42 +465,33 @@
             db.ref('users/'+currentUser).update({ balance: (userData.balance || 0) + reward, myPlans: upPlans, lastTaskTime: Date.now() });
         }
 
-        async function openHistory() {
-            document.getElementById('historyOverlay').style.display = 'block';
-            const list = document.getElementById('historyList');
-            list.innerHTML = '<div class="flex flex-col items-center py-20 text-slate-400"><i class="fa fa-spinner fa-spin text-2xl mb-2"></i><p class="text-xs font-bold uppercase tracking-widest">Loading Logs...</p></div>';
-            
-            try {
-                let records = [];
-                const depSnap = await db.ref('deposits').orderByChild('user').equalTo(currentUser).once('value');
-                depSnap.forEach(child => { records.push({ ...child.val(), type: 'Deposit' }); });
-                const witSnap = await db.ref('withdraws').orderByChild('user').equalTo(currentUser).once('value');
-                witSnap.forEach(child => { records.push({ ...child.val(), type: 'Withdraw' }); });
-                records.sort((a, b) => new Date(b.time) - new Date(a.time));
+        function submitDeposit(e) {
+            e.preventDefault();
+            db.ref('deposits').push({
+                user: currentUser, 
+                method: document.getElementById('depMethod').value,
+                amount: parseInt(document.getElementById('depAmount').value),
+                trx: document.getElementById('depTrx').value, 
+                status: 'Pending', 
+                time: new Date().toLocaleString()
+            }).then(() => { alert("আবেদন পাঠানো হয়েছে! এডমিন চেক করে ব্যালেন্স যোগ করে দিবে।"); e.target.reset(); });
+        }
 
-                if (records.length === 0) {
-                    list.innerHTML = '<p class="text-center py-20 text-slate-400 italic">No records found.</p>';
-                    return;
-                }
-
-                list.innerHTML = records.map(r => `
-                    <div class="bg-white p-5 rounded-3xl border border-slate-100 flex justify-between items-center shadow-sm">
-                        <div class="flex items-center gap-4">
-                            <div class="w-10 h-10 rounded-2xl flex items-center justify-center ${r.type === 'Deposit' ? 'bg-blue-50 text-blue-600' : 'bg-orange-50 text-orange-600'}">
-                                <i class="fa ${r.type === 'Deposit' ? 'fa-arrow-down' : 'fa-arrow-up'} text-xs"></i>
-                            </div>
-                            <div>
-                                <p class="text-[8px] font-black uppercase ${r.type === 'Deposit' ? 'text-blue-600' : 'text-orange-600'} tracking-widest">${r.type}</p>
-                                <p class="text-sm font-black text-slate-800 tracking-tight">৳${r.amount}</p>
-                                <p class="text-[8px] text-slate-400 font-bold uppercase mt-0.5">${r.time}</p>
-                            </div>
-                        </div>
-                        <span class="text-[8px] font-black px-3 py-1.5 rounded-xl border ${r.status === 'Pending' ? 'bg-amber-50 text-amber-600 border-amber-100' : 'bg-green-50 text-green-600 border-green-100'}">
-                            ${r.status.toUpperCase()}
-                        </span>
-                    </div>
-                `).join('');
-            } catch (error) { list.innerHTML = '<p class="text-center py-20 text-red-400">Error loading data.</p>'; }
+        function submitWithdraw(e) {
+            e.preventDefault();
+            const amt = parseInt(document.getElementById('witAmount').value);
+            if(amt > userData.balance) return alert("অপ্রতুল ব্যালেন্স!");
+            if(amt < 100) return alert("নূন্যতম উইথড্র ১০০ টাকা!");
+            db.ref('withdraws').push({
+                user: currentUser, amount: amt, 
+                method: document.getElementById('witMethod').value, 
+                number: document.getElementById('witPhone').value, 
+                status: 'Pending', time: new Date().toLocaleString()
+            }).then(() => {
+                db.ref('users/'+currentUser).update({ balance: userData.balance - amt });
+                alert("উইথড্র রিকোয়েস্ট পাঠানো হয়েছে!");
+                e.target.reset();
+            });
         }
 
         function checkAndResetTasks() {
@@ -481,11 +506,12 @@
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             if(btn) {
-                document.querySelectorAll('.nav-btn').forEach(b => b.classList.add('text-slate-300'));
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.add('text-stone-500'));
                 document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('nav-active'));
-                btn.classList.remove('text-slate-300'); btn.classList.add('nav-active');
+                btn.classList.remove('text-stone-500'); btn.classList.add('nav-active');
             }
-            window.scrollTo(0,0);
+            if(id === 'deposit') toggleWalletTab('dep');
+            window.scrollTo(0, 0);
         }
 
         function toggleAuthMode() { 
@@ -493,35 +519,30 @@
             document.getElementById('authBtn').innerText = isL ? "SIGN UP" : "LOGIN";
             document.getElementById('authTitle').innerText = isL ? "CREATE ACCOUNT" : "LOGIN TO CTC";
             document.getElementById('authName').classList.toggle('hidden', !isL);
+            document.getElementById('authName').required = isL;
         }
 
         document.getElementById('authForm').onsubmit = (e) => {
             e.preventDefault();
+            const name = document.getElementById('authName').value.trim();
             const phone = document.getElementById('authPhone').value.trim();
             const pass = document.getElementById('authPassword').value.trim();
             const isSignUp = document.getElementById('authBtn').innerText === "SIGN UP";
             if(isSignUp) {
                 db.ref('users/'+phone).once('value', s => {
-                    if(s.exists()) return Swal.fire('Error', 'Account already exists!', 'error');
-                    db.ref('users/'+phone).set({ name: document.getElementById('authName').value, phone, password: pass, balance: 0 }).then(() => loginSuccess(phone));
+                    if(s.exists()) return alert("এই নাম্বার দিয়ে অলরেডি একাউন্ট আছে!");
+                    db.ref('users/'+phone).set({ name, phone, password: pass, balance: 0 }).then(() => loginSuccess(phone));
                 });
             } else {
-                db.ref('users/'+phone).once('value', s => (s.exists() && s.val().password === pass) ? loginSuccess(phone) : Swal.fire('Error', 'Wrong data!', 'error'));
+                db.ref('users/'+phone).once('value', s => (s.exists() && s.val().password === pass) ? loginSuccess(phone) : alert("ভুল তথ্য দিয়েছেন!"));
             }
         };
 
         function loginSuccess(p) { localStorage.setItem('ctc_user', p); location.reload(); }
-        function logout() { localStorage.clear(); location.reload(); }
-        function toggleWalletTab(t) {
-            document.getElementById('walletDepSection').style.display = t === 'dep'?'block':'none';
-            document.getElementById('walletWitSection').style.display = t === 'wit'?'block':'none';
-            document.getElementById('tabDep').classList.toggle('active', t==='dep');
-            document.getElementById('tabWit').classList.toggle('active', t==='wit');
-        }
-        function closeHistory() { document.getElementById('historyOverlay').style.display='none'; }
-        function copyNum() { navigator.clipboard.writeText(document.getElementById('adminDisplayNum').innerText); Swal.fire({toast:true, title:'Copied!', position:'top-end', timer:1500, showConfirmButton:false, icon:'success'}); }
-        function copyReferLink() { navigator.clipboard.writeText(document.getElementById('referLinkInput').value); Swal.fire({toast:true, title:'Link Copied!', position:'top-end', timer:1500, showConfirmButton:false, icon:'success'}); }
-        function goToWithdraw() { showPage('deposit', document.getElementById('nav-wallet')); toggleWalletTab('wit'); }
+        function logout() { if(confirm("লগআউট করতে চান?")) { localStorage.clear(); location.reload(); } }
+        function copyNum() { navigator.clipboard.writeText(document.getElementById('adminDisplayNum').innerText); alert("পেমেন্ট নাম্বার কপি করা হয়েছে!"); }
     </script>
 </body>
 </html>
+
+```
