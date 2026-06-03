@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CTC Invest - Tier 1 Global Banking</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: #03050d;
+            color: #f8fafc;
+        }
+        .page { display: none; }
+        .page.active { display: block; animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .nav-active { 
+            color: #06b6d4 !important; 
+            filter: drop-shadow(0 0 12px rgba(6, 182, 212, 0.5));
+        }
+        
+        .royal-card { 
+            background: linear-gradient(145deg, #091024, #050814);
+            border: 1px solid rgba(6, 182, 212, 0.08);
+            border-radius: 1.25rem;
+            box-shadow: 0 15px 35px -10px rgba(0,0,0,0.7);
+            transition: all 0.25s ease;
+        }
+        .royal-card:hover {
+            border-color: rgba(6, 182, 212, 0.25);
+            background: linear-gradient(145deg, #0d1630, #060a17);
+        }
+        
+        #authOverlay, #historyOverlay { 
+            position: fixed; 
+            inset: 0; 
+            background: #03050d; 
+            z-index: 1000; 
+            display: none; 
+            overflow-y: auto; 
+        }
+        
+        .btn-royal { 
+            background: linear-gradient(135deg, #06b6d4, #0284c7); 
+            color: #fff;
+            font-weight: 700;
+            border-radius: 1rem; 
+            transition: all 0.25s; 
+            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.2);
+        }
+        .btn-royal:hover { 
+            opacity: 0.95; 
+            box-shadow: 0 4px 20px rgba(6, 182, 212, 0.4);
+        }
+        
+        .glass-blur { 
+            background: rgba(3, 5, 13, 0.85); 
+            backdrop-filter: blur(25px); 
+            -webkit-backdrop-filter: blur(25px); 
+        }
+        input, select { 
+            background-color: #080e21 !important; 
+            border: 1px solid #1e293b !important; 
+            color: white !important; 
+        }
+        input:focus, select:focus {
+            border-color: #06b6d4 !important;
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.2);
+        }
+
+        /* Pulse Graph Animation to mimic real trading apps */
+        @keyframes pulseGraph {
+            0%, 100% { height: 30%; }
+            50% { height: 75%; }
+        }
+        .graph-bar { animation: pulseGraph 2s infinite ease-in-out; }
+    </style>
+</head>
+<body class="pb-36 bg-slate-950">
+
+    <!-- Auth Security Layer -->
+    <div id="authOverlay">
+        <div class="p-6 flex flex-col min-h-screen justify-center max-w-md mx-auto">
+            <div class="text-center mb-10">
+                <div class="bg-gradient-to-tr from-cyan-500 to-blue-600 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl shadow-cyan-500/10">
+                    <i class="fa fa-shield-halved text-white text-3xl"></i>
+                </div>
+                <h2 id="authTitle" class="font-extrabold text-2xl tracking-tight text-white uppercase">Terminal Firewall</h2>
+                <p class="text-slate-400 mt-1.5 text-xs">Enter credentials to connect to the node network</p>
+            </div>
+            <form id="authForm" class="space-y-4">
+                <input type="text" id="authName" placeholder="Full Name" class="w-full rounded-xl p-4 text-xs outline-none hidden">
+                <div class="relative">
+                    <i class="fa fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
+                    <input type="tel" id="authPhone" placeholder="Mobile Identifier" required class="w-full rounded-xl p-4 pl-11 text-xs outline-none">
+                </div>
+                <div class="relative">
+                    <i class="fa fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
+                    <input type="password" id="authPassword" placeholder="Access Password" required class="w-full rounded-xl p-4 pl-11 text-xs outline-none">
+                </div>
+                <button type="submit" id="authBtn" class="w-full btn-royal py-4 text-sm uppercase tracking-wider mt-2">Establish Connection</button>
+            </form>
+            <p class="text-center mt-6 text-xs text-slate-500">
+                <span id="toggleText">New to the cloud nodes?</span> 
+                <button onclick="toggleAuthMode()" id="authToggleBtn" class="text-cyan-400 font-bold ml-1 hover:underline">Provision Node</button>
+            </p>
+        </div>
+    </div>
+
+    <!-- Statement Sheets Overlay -->
+    <div id="historyOverlay">
+        <div class="p-6 max-w-md mx-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="font-bold text-lg text-cyan-400 tracking-tight">Ledger Operations Log</h2>
+                <button onclick="closeHistory()" class="bg-slate-900 w-9 h-9 rounded-full flex items-center justify-center text-slate-400 border border-slate-800"><i class="fa fa-times text-xs"></i></button>
+            </div>
+            <div class="space-y-3" id="historyList"></div>
+        </div>
+    </div>
+
+    <!-- App Shell Frame -->
+    <div id="mainApp" style="display:none;">
+        
+        <!-- Header Profile Bar -->
+        <div class="glass-blur border-b border-slate-900 p-4 sticky top-0 z-50 flex justify-between items-center px-4 shadow-md max-w-md mx-auto">
+            <div class="flex items-center gap-2.5">
+                <div class="bg-gradient-to-r from-cyan-500 to-blue-600 p-2 rounded-xl text-white shadow shadow-cyan-500/20"><i class="fa fa-cubes text-xs"></i></div>
+                <h1 class="font-extrabold text-white text-lg tracking-tight">CTC <span class="text-cyan-400 font-bold">QUANT</span></h1>
+            </div>
+            <div class="flex items-center gap-3">
+                <div class="bg-[#080f26] px-3.5 py-1.5 rounded-xl border border-cyan-500/10 shadow-inner">
+                    <span id="userBalance" class="text-xs font-extrabold text-cyan-400 tracking-wide">৳0.00</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 1. PAGE: HIGH-END PROFESSIONAL DASHBOARD -->
+        <div id="home" class="page active p-4 max-w-md mx-auto space-y-4">
+            
+            <!-- Real App Style Balance Hero Section -->
+            <div class="royal-card p-5 bg-gradient-to-br from-[#0c1633] via-[#060b1a] to-[#040612] relative overflow-hidden">
+                <div class="absolute -right-10 -top-10 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl"></div>
+                
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="text-[10px] uppercase tracking-widest font-bold text-slate-500">Net Asset Valuation</p>
+                        <h2 class="text-2xl font-black tracking-tight text-white mt-1">CTC Secure Cloud</h2>
+                    </div>
+                    <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[9px] px-2.5 py-1 rounded-lg font-bold uppercase tracking-wide"><i class="fa fa-shield-check mr-1"></i>Tier 1 Secure</span>
+                </div>
+
+                <!-- Fake Real-time Trading Wavechart Layer -->
+                <div class="h-10 flex items-end gap-1 mt-6 opacity-35 px-1">
+                    <div class="w-full bg-cyan-500 rounded-t graph-bar" style="animation-delay: 0.1s;"></div>
+                    <div class="w-full bg-cyan-400 rounded-t graph-bar" style="animation-delay: 0.4s;"></div>
+                    <div class="w-full bg-blue-500 rounded-t graph-bar" style="animation-delay: 0.2s;"></div>
+                    <div class="w-full bg-cyan-500 rounded-t graph-bar" style="animation-delay: 0.6s;"></div>
+                    <div class="w-full bg-blue-600 rounded-t graph-bar" style="animation-delay: 0.3s;"></div>
+                    <div class="w-full bg-cyan-300 rounded-t graph-bar" style="animation-delay: 0.5s;"></div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 mt-4 pt-3 border-t border-slate-900">
+                    <div>
+                        <p class="text-[9px] text-slate-500 uppercase font-medium">Node Cluster Status</p>
+                        <p class="text-xs font-bold text-emerald-400 mt-0.5"><i class="fa fa-circle-dot text-[9px] animate-pulse mr-1"></i>Operational</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-[9px] text-slate-500 uppercase font-medium">Algorithm Index</p>
+                        <p class="text-xs font-bold text-cyan-400 mt-0.5"><i class="fa fa-microchip text-[10px] mr-1"></i>v4.2 Pro</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ticker Banner Announcement -->
+            <div class="bg-[#061224] rounded-xl p-2.5 px-3.5 text-cyan-400 text-[11px] flex items-center gap-2.5 border border-cyan-500/10">
+                <i class="fa fa-wave-pulse text-xs animate-pulse shrink-0"></i>
+                <marquee scrollamount="3.5" class="font-medium tracking-wide">Dynamic cloud node protocol synchronized. Withdraw processing limits: 100 TK Minimum. Powered by institutional smart contracts. Dev By Rakib.</marquee>
+            </div>
+
+            <!-- Professional Structured Utilities Grid Menu Layout -->
+            <div class="space-y-2.5">
+                <p class="text-[10px] text-slate-500 font-extrabold uppercase tracking-widest ml-1">System Gateway Modules</p>
+                
+                <div class="grid grid-cols-2 gap-3">
+                    <div onclick="showPage('deposit', document.getElementById('nav-deposit'))" class="royal-card p-4 flex items-center gap-3.5 cursor-pointer">
+                        <div class="w-10 h-10 bg-cyan-500/5 rounded-xl flex items-center justify-center text-cyan-400 border border-cyan-500/10 shrink-0"><i class="fa fa-money-bill-transfer text-base"></i></div>
+                        <div>
+                            <span class="text-xs font-bold text-white block">Recharge Vault</span>
+                            <span class="text-[10px] text-slate-500 block mt-0.5">Instant Deposit</span>
+                        </div>
+                    </div>
+
+                    <div onclick="showPage('withdraw', document.getElementById('nav-withdraw'))" class="royal-card p-4 flex items-center gap-3.5 cursor-pointer">
+                        <div class="w-10 h-10 bg-cyan-500/5 rounded-xl flex items-center justify-center text-cyan-400 border border-cyan-500/10 shrink-0"><i class="fa fa-wallet text-base"></i></div>
+                        <div>
+                            <span class="text-xs font-bold text-white block">Asset Payout</span>
+                            <span class="text-[10px] text-slate-500 block mt-0.5">Secure Cashout</span>
+                        </div>
+                    </div>
+
+                    <div onclick="showPage('vip', document.getElementById('nav-vip'))" class="royal-card p-4 flex items-center gap-3.5 cursor-pointer">
+                        <div class="w-10 h-10 bg-cyan-500/5 rounded-xl flex items-center justify-center text-cyan-400 border border-cyan-500/10 shrink-0"><i class="fa fa-crown text-base"></i></div>
+                        <div>
+                            <span class="text-xs font-bold text-white block">VIP Server Nodes</span>
+                            <span class="text-[10px] text-slate-500 block mt-0.5">Contract List</span>
+                        </div>
+                    </div>
+
+                    <div onclick="showPage('refer', document.getElementById('nav-refer'))" class="royal-card p-4 flex items-center gap-3.5 cursor-pointer">
+                        <div class="w-10 h-10 bg-cyan-500/5 rounded-xl flex items-center justify-center text-cyan-400 border border-cyan-500/10 shrink-0"><i class="fa fa-share-nodes text-base"></i></div>
+                        <div>
+                            <span class="text-xs font-bold text-white block">Affiliate Link</span>
+                            <span class="text-[10px] text-slate-500 block mt-0.5">Network Growth</span>
+                        </div>
+                    </div>
+
+                    <div onclick="showPage('support', document.getElementById('nav-support'))" class="royal-card p-4 flex items-center gap-3.5 cursor-pointer col-span-2">
+                        <div class="w-10 h-10 bg-cyan-500/5 rounded-xl flex items-center justify-center text-cyan-400 border border-cyan-500/10 shrink-0"><i class="fa fa-headset text-base"></i></div>
+                        <div>
+                            <span class="text-xs font-bold text-white block">Technical Operations Desk</span>
+                            <span class="text-[10px] text-slate-500 block mt-0.5">Direct synchronizer support helpline</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Payout Audit Stream to Increase User Trust -->
+            <div class="royal-card p-4 bg-slate-950/40">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-[9px] text-slate-500 font-extrabold uppercase tracking-wider">Live Blockchain Payout Audit</span>
+                    <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping"></span>
+                </div>
+                <div class="h-6 overflow-hidden text-[11px] text-slate-400" id="liveTickerContainer">
+                    <p id="liveTickerText" class="transition-all duration-500 transform translate-y-0 font-medium"><i class="fa fa-circle-check text-emerald-400 mr-1.5"></i>User 018*** successfully liquidated ৳1450.00 via Nagad</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. PAGE: MINING TASKS -->
+        <div id="tasks" class="page p-5 max-w-md mx-auto space-y-4">
+            <div class="royal-card p-6 text-center">
+                <div class="w-12 h-12 bg-cyan-500/10 rounded-2xl flex items-center justify-center mx-auto mb-3 text-cyan-400 text-lg border border-cyan-500/20">
+                    <i class="fa fa-terminal"></i>
+                </div>
+                <h2 class="font-bold text-base text-white">Quantum Core Operations</h2>
+                <div class="mt-1 inline-block bg-slate-950 px-3 py-1 rounded-full text-[10px] font-medium text-slate-400 border border-slate-900">Frequency Reset: 24h Cycle</div>
+            </div>
+            <div id="taskBlocks" class="space-y-3"></div>
+            <p id="noTaskMsg" class="text-center text-slate-500 text-xs py-16 italic">No cluster nodes acquired yet. Buy a plan inside VIP section to trigger tasks.</p>
+        </div>
+
+        <!-- 3. PAGE: DEPOSIT ONLY -->
+        <div id="deposit" class="page p-5 max-w-md mx-auto space-y-4">
+            <div class="royal-card p-5 space-y-4">
+                <h3 class="font-bold text-sm text-white border-b border-slate-900 pb-2"><i class="fa fa-money-bill-wave text-cyan-400 mr-2"></i>Recharge Vault Portal</h3>
+                
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-900">
+                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Official Payment Number</p>
+                    <div class="flex justify-between items-center">
+                        <span id="adminDisplayNum" class="font-bold text-base text-cyan-400 tracking-wider">017XXXXXXXX</span>
+                        <button onclick="copyNum()" class="text-slate-400 hover:text-white p-2"><i class="fa fa-copy text-xs"></i></button>
+                    </div>
+                </div>
+
+                <form onsubmit="submitDeposit(event)" class="space-y-3">
+                    <select id="depMethod" required class="w-full rounded-xl p-3.5 text-xs outline-none">
+                        <option value="">Select Gateway Platform</option>
+                        <option value="bKash">bKash (Personal)</option>
+                        <option value="Nagad">Nagad (Personal)</option>
+                    </select>
+                    <input type="number" id="depAmount" placeholder="Deposit Amount (৳)" required class="w-full rounded-xl p-3.5 text-xs outline-none">
+                    <input type="text" id="depTrx" placeholder="Enter Reference Transaction ID (TrxID)" required class="w-full rounded-xl p-3.5 text-xs outline-none">
+                    <button type="submit" class="w-full btn-royal py-3.5 text-xs uppercase tracking-wider">Submit Verification Request</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 4. PAGE: WITHDRAW ONLY -->
+        <div id="withdraw" class="page p-5 max-w-md mx-auto space-y-4">
+            <div class="royal-card p-5 space-y-4">
+                <h3 class="font-bold text-sm text-white border-b border-slate-900 pb-2"><i class="fa fa-wallet text-cyan-400 mr-2"></i>Asset Payout Terminal</h3>
+                
+                <div class="bg-slate-950 p-5 rounded-2xl border border-slate-900 text-center">
+                    <p class="text-[10px] uppercase font-bold tracking-widest text-slate-500">Withdrawable Balance</p>
+                    <h2 id="withdrawBalDisplay" class="text-2xl font-black tracking-tight text-cyan-400 mt-1">৳0.00</h2>
+                </div>
+
+                <form onsubmit="submitWithdraw(event)" class="space-y-3">
+                    <select id="witMethod" required class="w-full rounded-xl p-3.5 text-xs outline-none">
+                        <option value="">Choose Payout Gateway</option>
+                        <option value="bKash">bKash</option>
+                        <option value="Nagad">Nagad</option>
+                    </select>
+                    <input type="tel" id="witPhone" placeholder="Receiving Wallet Account Number" required class="w-full rounded-xl p-3.5 text-xs outline-none">
+                    <input type="number" id="witAmount" placeholder="Amount (Minimum Limit ৳100)" required class="w-full rounded-xl p-3.5 text-xs outline-none">
+                    <button type="submit" class="w-full btn-royal py-3.5 text-xs uppercase tracking-wider">Confirm Liquidation Settlement</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 5. PAGE: VIP NODES PACKAGES ONLY -->
+        <div id="vip" class="page p-5 max-w-md mx-auto space-y-4">
+            <div class="flex justify-between items-center border-l-4 border-cyan-500 pl-2 mb-2">
+                <h3 class="font-bold text-white uppercase text-xs tracking-widest">Premium Allocation Nodes</h3>
+                <span class="text-[9px] bg-slate-900 text-slate-400 border border-slate-800 px-2 py-0.5 rounded-md">Live Sync</span>
+            </div>
+            <div id="planList" class="grid grid-cols-1 gap-4"></div>
+        </div>
+
+        <!-- 6. PAGE: REFER SYSTEM ONLY -->
+        <div id="refer" class="page p-5 max-w-md mx-auto space-y-4">
+            <div class="royal-card p-6 space-y-4">
+                <div class="text-center">
+                    <div class="w-11 h-11 bg-cyan-500/10 rounded-full flex items-center justify-center mx-auto text-cyan-400 mb-2 border border-cyan-500/20">
+                        <i class="fa fa-share-nodes text-base"></i>
+                    </div>
+                    <h3 class="font-bold text-base text-white">Affiliate Architecture</h3>
+                    <p class="text-xs text-slate-400 mt-1">Invite new users and construct a node mining pool to earn 3-Tier automatic commission payloads.</p>
+                </div>
+                
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-1">
+                    <p class="text-[10px] font-bold text-amber-400 uppercase tracking-wider"><i class="fa fa-link mr-1"></i> Global Invitation Link</p>
+                    <div class="flex justify-between items-center pt-1">
+                        <span id="refLinkDisplay" class="text-[11px] text-slate-500 truncate pr-2">Generating Link Asset...</span>
+                        <button onclick="copyRefLink()" class="bg-cyan-500 text-slate-950 px-3 py-1.5 rounded-lg text-[10px] font-black shrink-0 shadow">Copy Link</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. PAGE: SUPPORT ONLY -->
+        <div id="support" class="page p-5 max-w-md mx-auto space-y-4">
+            <div class="royal-card p-6 space-y-4">
+                <div class="text-center">
+                    <div class="w-11 h-11 bg-cyan-500/10 rounded-full flex items-center justify-center mx-auto text-cyan-400 mb-2 border border-cyan-500/20">
+                        <i class="fa fa-headset text-base"></i>
+                    </div>
+                    <h3 class="font-bold text-base text-white">Institutional Support Desk</h3>
+                    <p class="text-xs text-slate-400 mt-1">Experiencing a gateway delay or synchronization failure? Contact our terminal operator.</p>
+                </div>
+
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
+                    <div>
+                        <p class="text-xs font-bold text-white">Direct Operational Hotlink</p>
+                        <p class="text-[10px] text-slate-500 mt-0.5">Voice verification support</p>
+                    </div>
+                    <a id="supportCallLink" href="tel:" class="bg-[#091024] border border-cyan-500/10 text-cyan-400 px-3.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1">
+                        <i class="fa fa-phone text-[10px]"></i> Dial Operator
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 8. PAGE: ACCOUNT PROFILE -->
+        <div id="account" class="page p-5 max-w-md mx-auto">
+            <div class="royal-card p-6 text-center space-y-5">
+                <div>
+                    <div class="w-16 h-16 bg-slate-950 rounded-full flex items-center justify-center mx-auto mb-2 border border-cyan-500/10 shadow-md">
+                        <i class="fa fa-user-astronaut text-cyan-400 text-2xl"></i>
+                    </div>
+                    <h2 id="accNameDisplay" class="font-bold text-lg text-white">Syncing Security...</h2>
+                    <div id="accPhone" class="inline-block mt-0.5 bg-slate-950 text-slate-500 px-3 py-0.5 rounded-full text-[10px] font-bold border border-slate-900">ID: 01xxxxxxxxx</div>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-3 text-left">
+                    <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-900">
+                        <p class="text-[9px] font-bold text-slate-500 uppercase">Settled Asset</p>
+                        <p id="accBalance" class="text-cyan-400 font-extrabold text-sm mt-0.5">৳0.00</p>
+                    </div>
+                    <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-900">
+                        <p class="text-[9px] font-bold text-slate-500 uppercase">Clearance</p>
+                        <p class="text-emerald-400 font-bold text-xs mt-0.5"><i class="fa fa-badge-check text-[10px]"></i> VIP Nodes Node</p>
+                    </div>
+                </div>
+                
+                <div class="space-y-2">
+                    <button onclick="openHistory()" class="w-full bg-slate-950 text-slate-300 py-3.5 rounded-xl text-xs font-bold flex items-center justify-center gap-2 border border-slate-900 hover:text-cyan-400">
+                        <i class="fa fa-receipt text-cyan-400 text-xs"></i> TRANSACTION RECORDS
+                    </button>
+                    <button onclick="logout()" class="w-full bg-red-950/10 text-red-400 py-3.5 rounded-xl text-xs font-bold border border-red-900/10 uppercase tracking-wider">Disconnect Secure Session</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sticky Bottom Tab Navigation Docker Dashboard -->
+        <div class="fixed bottom-0 left-0 right-0 glass-blur flex justify-around items-center py-3 border-t border-slate-900/80 z-50 rounded-t-2xl shadow-2xl max-w-md mx-auto px-1">
+            <button id="nav-home" onclick="showPage('home', this)" class="nav-btn nav-active flex flex-col items-center gap-1 text-slate-500 transition-all w-12">
+                <i class="fa fa-compass text-base"></i>
+                <span class="text-[9px] font-bold tracking-tight">Main</span>
+            </button>
+            <button id="nav-tasks" onclick="showPage('tasks', this)" class="nav-btn flex flex-col items-center gap-1 text-slate-500 transition-all w-12">
+                <i class="fa fa-microchip text-base"></i>
+                <span class="text-[9px] font-bold tracking-tight">Mining</span>
+            </button>
+            <button id="nav-deposit" onclick="showPage('deposit', this)" class="nav-btn flex flex-col items-center gap-1 text-slate-500 transition-all w-12">
+                <i class="fa fa-money-bill-transfer text-base"></i>
+                <span class="text-[9px] font-bold tracking-tight">Recharge</span>
+            </button>
+            <button id="nav-withdraw" onclick="showPage('withdraw', this)" class="nav-btn flex flex-col items-center gap-1 text-slate-500 transition-all w-12">
+                <i class="fa fa-wallet text-base"></i>
+                <span class="text-[9px] font-bold tracking-tight">Payout</span>
+            </button>
+            <button id="nav-vip" onclick="showPage('vip', this)" class="nav-btn flex flex-col items-center gap-1 text-slate-500 transition-all w-12">
+                <i class="fa fa-crown text-base"></i>
+                <span class="text-[9px] font-bold tracking-tight">VIP</span>
+            </button>
+            <button id="nav-refer" onclick="showPage('refer', this)" class="nav-btn flex flex-col items-center gap-1 text-slate-500 transition-all w-12">
+                <i class="fa fa-share-nodes text-base"></i>
+                <span class="text-[9px] font-bold tracking-tight">Refer</span>
+            </button>
+            <button id="nav-support" onclick="showPage('support', this)" class="nav-btn flex flex-col items-center gap-1 text-slate-500 transition-all w-12 hidden">
+                <i class="fa fa-headset text-base"></i>
+                <span class="text-[9px] font-bold tracking-tight">Help</span>
+            </button>
+            <button id="nav-account" onclick="showPage('account', this)" class="nav-btn flex flex-col items-center gap-1 text-slate-500 transition-all w-12">
+                <i class="fa fa-user-gear text-base"></i>
+                <span class="text-[9px] font-bold tracking-tight">Identity</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Firebase Core Integrations -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDFVFzroN-XwJksvOxG79ln0vQd0xvqAs4",
+            authDomain: "ctc-coin.firebaseapp.com",
+            databaseURL: "https://ctc-coin-default-rtdb.firebaseio.com",
+            projectId: "ctc-coin",
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        let currentUser = null;
+        let userData = {};
+        let activePlansData = {};
+
+        // Automatic Live Stream Auditor Mock Logic for professional trust
+        const targetGateways = ['bKash', 'Nagad'];
+        setInterval(() => {
+            const container = document.getElementById('liveTickerText');
+            if(!container) return;
+            const pseudoPhone = "01" + Math.floor(3 + Math.random() * 7) + Math.floor(10 + Math.random() * 89) + "***";
+            const pseudoAmount = Math.floor(3 + Math.random() * 45) * 100;
+            const pseudoGateway = targetGateways[Math.floor(Math.random() * targetGateways.length)];
+            
+            container.style.opacity = 0;
+            setTimeout(() => {
+                container.innerHTML = `<i class="fa fa-circle-check text-emerald-400 mr-1.5"></i>User ${pseudoPhone} successfully liquidated ৳${pseudoAmount}.00 via ${pseudoGateway}`;
+                container.style.opacity = 1;
+            }, 400);
+        }, 6500);
+
+        window.onload = () => {
+            const saved = localStorage.getItem('ctc_user');
+            if(saved) initUser(saved);
+            else document.getElementById('authOverlay').style.display = 'block';
+        };
+
+        function initUser(phone) {
+            currentUser = phone;
+            document.getElementById('authOverlay').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+            document.getElementById('accPhone').innerText = "ID: " + phone;
+
+            const appUrl = window.location.href.split('?')[0];
+            const refLink = `${appUrl}?ref=${phone}`;
+            document.getElementById('refLinkDisplay').innerText = refLink;
+
+            db.ref('appSettings/adminPhone').on('value', s => {
+                const num = s.val() || "017XXXXXXXX";
+                document.getElementById('adminDisplayNum').innerText = num;
+                document.getElementById('supportCallLink').href = "tel:" + num;
+            });
+
+            db.ref('plans').on('value', s => {
+                activePlansData = s.val() || {};
+                renderPlansList();
+            });
+
+            db.ref('users/'+phone).on('value', s => {
+                userData = s.val() || {};
+                const bal = `৳${(userData.balance || 0).toFixed(2)}`;
+                document.getElementById('userBalance').innerText = bal;
+                document.getElementById('accBalance').innerText = bal;
+                document.getElementById('withdrawBalDisplay').innerText = bal;
+                document.getElementById('accNameDisplay').innerText = userData.name || "VIP Core Client";
+                checkAndResetTasks();
+                renderPlansList();
+                renderTaskBlocks();
+            });
+        }
+
+        function openHistory() {
+            document.getElementById('historyOverlay').style.display = 'block';
+            const list = document.getElementById('historyList');
+            list.innerHTML = '<div class="text-center py-8"><i class="fa fa-spinner fa-spin text-cyan-400 text-xl"></i></div>';
+            let records = [];
+            db.ref('deposits').orderByChild('user').equalTo(currentUser).once('value', s => {
+                s.forEach(child => { records.push({ ...child.val(), type: 'Deposit' }); });
+                db.ref('withdraws').orderByChild('user').equalTo(currentUser).once('value', sw => {
+                    sw.forEach(child => { records.push({ ...child.val(), type: 'Withdraw' }); });
+                    if(records.length === 0) {
+                        list.innerHTML = '<p class="text-center text-slate-500 italic py-10 text-xs">No entries processed inside current block.</p>';
+                    } else {
+                        records.sort((a, b) => new Date(b.time) - new Date(a.time));
+                        list.innerHTML = records.map(r => `
+                            <div class="bg-slate-900/40 p-4 rounded-xl border border-slate-900">
+                                <div class="flex justify-between items-start mb-1">
+                                    <span class="font-bold text-xs ${r.type === 'Deposit' ? 'text-cyan-400' : 'text-amber-500'}">${r.type}</span>
+                                    <span class="text-[9px] font-bold px-2 py-0.5 rounded-full ${r.status === 'Pending' ? 'bg-amber-500/10 text-amber-400' : 'bg-emerald-500/10 text-emerald-400'}">${r.status.toUpperCase()}</span>
+                                </div>
+                                <div class="flex justify-between items-end">
+                                    <div>
+                                        <p class="text-[10px] text-slate-500">${r.time}</p>
+                                        <p class="text-[10px] text-slate-400 mt-0.5">${r.method} ${r.trx ? '• '+r.trx : ''}</p>
+                                    </div>
+                                    <p class="font-bold text-xs text-zinc-200">৳${r.amount}</p>
+                                </div>
+                            </div>
+                        `).join('');
+                    }
+                });
+            });
+        }
+
+        function closeHistory() { document.getElementById('historyOverlay').style.display = 'none'; }
+
+        function renderPlansList() {
+            const list = document.getElementById('planList');
+            list.innerHTML = '';
+            const myPlans = userData.myPlans || {};
+            for(let key in activePlansData) {
+                const plan = activePlansData[key];
+                const isActive = myPlans.hasOwnProperty(key);
+                const dailyIncome = plan.reward * plan.tasks;
+
+                list.innerHTML += `
+                    <div class="royal-card p-5 flex flex-col justify-between bg-slate-900/10">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <span class="bg-cyan-500 text-slate-950 text-[9px] px-2.5 py-1 rounded-md font-bold uppercase tracking-wider mb-2 inline-block">${plan.name}</span>
+                                <h4 class="text-lg font-black text-white mt-0.5">৳${plan.price} <span class="text-[10px] text-slate-500 font-normal">Allocation Unit</span></h4>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-[10px] bg-slate-950 text-slate-400 border border-slate-900 px-2 py-1 rounded-md font-bold"><i class="fa fa-shield mr-1"></i>${plan.validity || 30} Days</span>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 my-4 bg-slate-950/50 p-3 rounded-xl border border-slate-900/60">
+                            <div>
+                                <p class="text-[9px] text-slate-500 uppercase font-medium">Daily Yield</p>
+                                <p class="text-xs font-bold text-emerald-400">৳${dailyIncome} TK</p>
+                            </div>
+                            <div>
+                                <p class="text-[9px] text-slate-500 uppercase font-medium">Frequency Cycle</p>
+                                <p class="text-xs font-bold text-cyan-400">${plan.tasks} Ops / Day</p>
+                            </div>
+                        </div>
+                        <div>
+                            ${isActive ? 
+                                `<button class="w-full bg-emerald-500/5 border border-emerald-500/10 text-emerald-400 py-3 rounded-xl text-xs font-bold uppercase tracking-wide cursor-not-allowed"><i class="fa fa-square-check mr-1"></i> Synchronized</button>` : 
+                                `<button onclick="buyPlan('${key}')" class="w-full btn-royal py-3 text-xs uppercase tracking-wide">Acquire Micro-Node</button>`
+                            }
+                        </div>
+                    </div>`;
+            }
+        }
+
+        function buyPlan(planKey) {
+            const plan = activePlansData[planKey];
+            if(userData.balance < plan.price) return alert("অপ্রতুল ফান্ড! অনুগ্রহ করে ওয়ালেট ব্যালেন্স রিচার্জ করুন।");
+            if(confirm(`আপনি কি নিশ্চিতভাবে ${plan.name} নোডটি সচল করতে চান?`)) {
+                const myPlans = userData.myPlans || {};
+                myPlans[planKey] = { name: plan.name, tasks: plan.tasks, reward: plan.reward, completedToday: 0 };
+                db.ref('users/'+currentUser).update({ balance: userData.balance - plan.price, myPlans: myPlans });
+                alert("আপনার VIP নোডটি সফলভাবে অ্যাক্টিভেট করা হয়েছে!");
+            }
+        }
+
+        function renderTaskBlocks() {
+            const container = document.getElementById('taskBlocks');
+            container.innerHTML = '';
+            if(!userData.myPlans) { document.getElementById('noTaskMsg').style.display = 'block'; return; }
+            document.getElementById('noTaskMsg').style.display = 'none';
+            for(let key in userData.myPlans) {
+                const myPlan = userData.myPlans[key];
+                let blockHtml = `<div class="space-y-2.5">`;
+                for(let i=1; i<=myPlan.tasks; i++) {
+                    const isDone = i <= (myPlan.completedToday || 0);
+                    blockHtml += `
+                        <div class="royal-card p-4 flex justify-between items-center bg-slate-900/10 ${isDone ? 'opacity-30 shadow-none' : ''}">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 ${isDone ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20'} rounded-xl flex items-center justify-center border"><i class="fa ${isDone ? 'fa-check' : 'fa-play text-[10px]'}"></i></div>
+                                <div>
+                                    <p class="font-bold text-xs text-white">${myPlan.name} - Unit Runtime #${i}</p>
+                                    <p class="text-emerald-400 text-[10px] font-bold">+ ৳${myPlan.reward} Profit</p>
+                                </div>
+                            </div>
+                            <button ${isDone ? 'disabled' : ''} onclick="claimSpecificTask('${key}', ${myPlan.reward})" class="${isDone ? 'bg-slate-900 text-slate-600' : 'bg-cyan-500 text-slate-950 font-black'} px-3.5 py-2 rounded-lg text-[10px] uppercase tracking-wider">${isDone ? 'Settled' : 'Execute'}</button>
+                        </div>`;
+                }
+                container.innerHTML += blockHtml + `</div>`;
+            }
+        }
+
+        function claimSpecificTask(pKey, reward) {
+            const upPlans = {...userData.myPlans};
+            upPlans[pKey].completedToday = (upPlans[pKey].completedToday || 0) + 1;
+            db.ref('users/'+currentUser).update({ balance: (userData.balance || 0) + reward, myPlans: upPlans, lastTaskTime: Date.now() });
+        }
+
+        function submitDeposit(e) {
+            e.preventDefault();
+            db.ref('deposits').push({
+                user: currentUser, 
+                method: document.getElementById('depMethod').value,
+                amount: parseInt(document.getElementById('depAmount').value),
+                trx: document.getElementById('depTrx').value, 
+                status: 'Pending', 
+                time: new Date().toLocaleString()
+            }).then(() => { alert("আবেদন জমা হয়েছে। খুব শীঘ্রই ব্যালেন্স যুক্ত হবে।"); e.target.reset(); });
+        }
+
+        function submitWithdraw(e) {
+            e.preventDefault();
+            const amt = parseInt(document.getElementById('witAmount').value);
+            if(amt > userData.balance) return alert("ওয়ালেটে পর্যাপ্ত ব্যালেন্স নেই!");
+            if(amt < 100) return alert("সর্বনিম্ন ক্যাশআউট ১০০ টাকা!");
+            db.ref('withdraws').push({
+                user: currentUser, amount: amt, 
+                method: document.getElementById('witMethod').value, 
+                number: document.getElementById('witPhone').value, 
+                status: 'Pending', time: new Date().toLocaleString()
+            }).then(() => {
+                db.ref('users/'+currentUser).update({ balance: userData.balance - amt });
+                alert("উইথড্র আবেদন সফলভাবে প্রেরিত হয়েছে!");
+                e.target.reset();
+            });
+        }
+
+        function checkAndResetTasks() {
+            if (new Date(userData.lastTaskTime || 0).toDateString() !== new Date().toDateString() && userData.myPlans) {
+                const resPlans = {...userData.myPlans};
+                for(let k in resPlans) resPlans[k].completedToday = 0;
+                db.ref('users/'+currentUser).update({ myPlans: resPlans });
+            }
+        }
+
+        function showPage(id, btn) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            if(btn) {
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.add('text-slate-500'));
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('nav-active'));
+                btn.classList.remove('text-slate-500'); btn.classList.add('nav-active');
+                
+                // Keep the structural menu items matching correctly
+                const linkedTargetId = btn.id.replace('nav-', '');
+                const linkedNavBtn = document.getElementById('nav-' + linkedTargetId);
+                if(linkedNavBtn) {
+                    linkedNavBtn.classList.remove('text-slate-500');
+                    linkedNavBtn.classList.add('nav-active');
+                }
+            }
+            window.scrollTo(0, 0);
+        }
+
+        function toggleAuthMode() { 
+            const isL = document.getElementById('authBtn').innerText === "ESTABLISH CONNECTION";
+            document.getElementById('authBtn').innerText = isL ? "CREATE ACCOUNT" : "ESTABLISH CONNECTION";
+            document.getElementById('authTitle').innerText = isL ? "REGISTER CLUSTER NODE" : "TERMINAL FIREWALL";
+            document.getElementById('authName').classList.toggle('hidden', !isL);
+            document.getElementById('authName').required = isL;
+        }
+
+        document.getElementById('authForm').onsubmit = (e) => {
+            e.preventDefault();
+            const name = document.getElementById('authName').value.trim();
+            const phone = document.getElementById('authPhone').value.trim();
+            const pass = document.getElementById('authPassword').value.trim();
+            const isSignUp = document.getElementById('authBtn').innerText === "CREATE ACCOUNT";
+            if(isSignUp) {
+                db.ref('users/'+phone).once('value', s => {
+                    if(s.exists()) return alert("এই নম্বর দিয়ে অলরেডি অ্যাকাউন্ট তৈরি করা আছে!");
+                    db.ref('users/'+phone).set({ name, phone, password: pass, balance: 0 }).then(() => loginSuccess(phone));
+                });
+            } else {
+                db.ref('users/'+phone).once('value', s => (s.exists() && s.val().password === pass) ? loginSuccess(phone) : alert("ভুল মোবাইল নম্বর অথবা অ্যাক্সেস পাসওয়ার্ড!"));
+            }
+        };
+
+        function loginSuccess(p) { localStorage.setItem('ctc_user', p); location.reload(); }
+        function logout() { if(confirm("নিরাপদ সেশনটি বন্ধ করতে চান?")) { localStorage.clear(); location.reload(); } }
+        function copyNum() { navigator.clipboard.writeText(document.getElementById('adminDisplayNum').innerText); alert("মার্চেন্ট নাম্বার কপি সম্পন্ন হয়েছে!"); }
+        function copyRefLink() { navigator.clipboard.writeText(document.getElementById('refLinkDisplay').innerText); alert("রেফারেল ইনভাইট লিংক ক্লিপবোর্ডে কপি হয়েছে!"); }
+    </script>
+</body>
+</html>
