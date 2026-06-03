@@ -3,294 +3,383 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CTC Invest - Premium Pro</title>
+    <title>CTC Invest - Ultra Pro Premium</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body { 
-            font-family: 'Outfit', sans-serif; 
-            background-color: #0b0b0d; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: #040612;
+            color: #f1f5f9;
         }
         .page { display: none; }
-        .page.active { display: block; animation: fadeIn 0.4s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .page.active { display: block; animation: slideUp 0.4s cubic-bezier(0.1, 0.8, 0.3, 1); }
         
-        .nav-active { color: #f59e0b !important; }
-        
-        .gold-card { 
-            background: #171512; 
-            border: 1px solid #2e261d; 
-            border-radius: 1.2rem;
-            transition: transform 0.2s;
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .gold-card:active { transform: scale(0.98); }
+        
+        .nav-active { 
+            color: #06b6d4 !important; 
+            filter: drop-shadow(0 0 10px rgba(6, 182, 212, 0.6));
+        }
+        
+        .royal-card { 
+            background: linear-gradient(135deg, #0b132b, #060a17);
+            border: 1px solid rgba(6, 182, 212, 0.12);
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.6);
+            transition: all 0.3s ease;
+        }
+        .royal-card:hover {
+            border-color: rgba(6, 182, 212, 0.3);
+            transform: translateY(-2px);
+        }
         
         #authOverlay, #historyOverlay { 
             position: fixed; 
             inset: 0; 
-            background: #0b0b0d; 
+            background: #040612; 
             z-index: 1000; 
             display: none; 
             overflow-y: auto; 
         }
         
-        .btn-primary { 
-            background: linear-gradient(135deg, #c29438, #8a641a); 
-            color: white; 
-            border-radius: 1rem; 
-            font-weight: 700; 
+        .btn-royal { 
+            background: linear-gradient(135deg, #06b6d4, #0b8ad4); 
+            color: #fff;
+            font-weight: 700;
+            border-radius: 1.25rem; 
             transition: all 0.3s; 
-            border: 1px solid #dfb76c;
+            box-shadow: 0 4px 20px rgba(6, 182, 212, 0.25);
         }
-        .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn-royal:hover { 
+            opacity: 0.95; 
+            box-shadow: 0 4px 25px rgba(6, 182, 212, 0.45);
+        }
         
-        .reward-tag { background: #261f13; color: #f59e0b; padding: 2px 8px; border-radius: 8px; font-size: 10px; font-weight: 700; border: 1px solid #4a3b21; }
-        .validity-tag { background: #1c1917; color: #a8a29e; padding: 2px 8px; border-radius: 8px; font-size: 10px; font-weight: 700; border: 1px solid #292524; }
-        
-        .wallet-tab { padding: 12px 24px; font-weight: 700; font-size: 15px; color: #78716c; cursor: pointer; transition: all 0.3s; border-radius: 1rem; }
-        .wallet-tab.active { color: #f59e0b; background: #261f13; border: 1px solid #4a3b21; }
-        
-        .glass { background: rgba(17, 17, 19, 0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
-        input, select { background-color: #171512 !important; border: 1px solid #2e261d !important; color: white !important; }
-        input::placeholder { color: #6b6661; }
+        .glass-blur { 
+            background: rgba(4, 6, 18, 0.85); 
+            backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px); 
+        }
+        input, select { 
+            background-color: #0b132b !important; 
+            border: 1px solid #1e293b !important; 
+            color: white !important; 
+        }
+        input:focus, select:focus {
+            border-color: #06b6d4 !important;
+            box-shadow: 0 0 12px rgba(6, 182, 212, 0.25);
+        }
     </style>
 </head>
-<body class="pb-28 text-stone-200">
+<body class="pb-36">
 
+    <!-- Auth Security Layer -->
     <div id="authOverlay">
-        <div class="p-8 flex flex-col min-h-screen justify-center max-w-md mx-auto">
-            <div class="text-center mb-12">
-                <div class="bg-gradient-to-br from-amber-400 to-amber-700 w-24 h-24 rounded-[2.5rem] flex items-center justify-center mx-auto mb-6 shadow-2xl rotate-12">
-                    <i class="fa fa-bolt text-white text-5xl -rotate-12"></i>
+        <div class="p-6 flex flex-col min-h-screen justify-center max-w-md mx-auto">
+            <div class="text-center mb-10">
+                <div class="bg-gradient-to-tr from-cyan-400 to-blue-600 w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-5 shadow-xl shadow-cyan-500/20">
+                    <i class="fa fa-shield-halved text-white text-4xl"></i>
                 </div>
-                <h2 id="authTitle" class="font-black text-4xl tracking-tighter text-amber-500 uppercase">Login To CTC</h2>
-                <p class="text-stone-400 mt-2 font-medium">Start your investment journey</p>
+                <h2 id="authTitle" class="font-extrabold text-3xl tracking-tight text-cyan-400 uppercase">Secure Firewall</h2>
+                <p class="text-slate-400 mt-2 text-sm">Authorized investment terminal access</p>
             </div>
             <form id="authForm" class="space-y-4">
-                <input type="text" id="authName" placeholder="Full Name" class="w-full rounded-2xl p-4 text-sm outline-none focus:ring-2 ring-amber-500/20 hidden">
+                <input type="text" id="authName" placeholder="Full Name" class="w-full rounded-2xl p-4 text-sm outline-none hidden">
                 <div class="relative">
-                    <i class="fa fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-stone-500"></i>
-                    <input type="tel" id="authPhone" placeholder="Phone Number" required class="w-full rounded-2xl p-4 pl-12 text-sm outline-none focus:ring-2 ring-amber-500/20">
+                    <i class="fa fa-phone absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"></i>
+                    <input type="tel" id="authPhone" placeholder="Phone Identity" required class="w-full rounded-2xl p-4 pl-12 text-sm outline-none">
                 </div>
                 <div class="relative">
-                    <i class="fa fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-stone-500"></i>
-                    <input type="password" id="authPassword" placeholder="Password" required class="w-full rounded-2xl p-4 pl-12 text-sm outline-none focus:ring-2 ring-amber-500/20">
+                    <i class="fa fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"></i>
+                    <input type="password" id="authPassword" placeholder="Access Password" required class="w-full rounded-2xl p-4 pl-12 text-sm outline-none">
                 </div>
-                <button type="submit" id="authBtn" class="w-full btn-primary py-5 shadow-2xl mt-6 text-lg uppercase tracking-wider">Login</button>
+                <button type="submit" id="authBtn" class="w-full btn-royal py-4.5 text-base uppercase tracking-wider mt-4">Connect Account</button>
             </form>
-            <p class="text-center mt-10 text-sm font-semibold text-stone-500">
-                <span id="toggleText">Don't have an account?</span> 
-                <button onclick="toggleAuthMode()" id="authToggleBtn" class="text-amber-500 font-extrabold ml-1">Sign Up</button>
+            <p class="text-center mt-8 text-sm text-slate-500">
+                <span id="toggleText">New to CTC Network?</span> 
+                <button onclick="toggleAuthMode()" id="authToggleBtn" class="text-cyan-400 font-bold ml-1 hover:underline">Register Node</button>
             </p>
         </div>
     </div>
 
+    <!-- Statement Sheets Overlay -->
     <div id="historyOverlay">
         <div class="p-6 max-w-md mx-auto">
-            <div class="flex justify-between items-center mb-8">
-                <h2 class="font-black text-2xl tracking-tight text-amber-500">Transaction Logs</h2>
-                <button onclick="closeHistory()" class="bg-stone-800 w-10 h-10 rounded-full flex items-center justify-center text-stone-400"><i class="fa fa-times"></i></button>
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="font-bold text-xl text-cyan-400">Vault Operations Ledger</h2>
+                <button onclick="closeHistory()" class="bg-slate-900 w-10 h-10 rounded-full flex items-center justify-center text-slate-400 border border-slate-800"><i class="fa fa-times"></i></button>
             </div>
-            <div class="space-y-4" id="historyList"></div>
+            <div class="space-y-3" id="historyList"></div>
         </div>
     </div>
 
+    <!-- App Shell Frame -->
     <div id="mainApp" style="display:none;">
         
-        <div class="bg-gradient-to-b from-amber-400 via-amber-500 to-amber-600 p-4 sticky top-0 z-50 flex justify-between items-center px-6 shadow-xl">
-            <div class="flex items-center gap-3">
-                <div class="bg-stone-950 p-2 rounded-xl shadow-md"><i class="fa fa-bolt text-amber-400 text-xs"></i></div>
-                <h1 class="font-black text-stone-950 text-2xl italic tracking-tighter">CTC <span class="text-stone-900 opacity-80">PRO</span></h1>
+        <!-- Header Profile Bar -->
+        <div class="glass-blur border-b border-slate-900/60 p-4 sticky top-0 z-50 flex justify-between items-center px-5 shadow-xl">
+            <div class="flex items-center gap-2">
+                <div class="bg-gradient-to-r from-cyan-500 to-blue-600 p-2 rounded-xl text-white shadow-lg"><i class="fa fa-layer-group text-xs"></i></div>
+                <h1 class="font-extrabold text-white text-xl tracking-tight">CTC <span class="text-cyan-400">QUANT</span></h1>
             </div>
             <div class="flex items-center gap-3">
-                <div class="bg-stone-950 px-4 py-2 rounded-2xl border border-amber-400/30">
-                    <span id="userBalance" class="text-sm font-black text-amber-400">৳0.00</span>
-                </div>
-                <div class="w-9 h-9 rounded-full border-2 border-stone-950 bg-amber-200 overflow-hidden flex items-center justify-center">
-                    <i class="fa fa-user text-stone-950 text-lg mt-1"></i>
+                <div class="bg-slate-950/80 px-4 py-1.5 rounded-xl border border-cyan-500/20">
+                    <span id="userBalance" class="text-sm font-bold text-cyan-400">৳0.00</span>
                 </div>
             </div>
         </div>
 
-        <div id="home" class="page active p-4">
-            
-            <div class="relative w-full h-44 rounded-2xl overflow-hidden mb-4 bg-stone-900 border border-stone-800 flex items-center justify-center">
-                <div class="absolute inset-0 bg-cover bg-center opacity-40 filter blur-[1px]" style="background-image: url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=600&q=80');"></div>
-                <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+        <!-- 1. PAGE: DASHBOARD -->
+        <div id="home" class="page active p-4 max-w-md mx-auto space-y-5">
+            <div class="relative w-full h-44 rounded-3xl overflow-hidden shadow-2xl border border-slate-900">
+                <div class="absolute inset-0 bg-cover bg-center opacity-25" style="background-image: url('https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&w=600&q=80');"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
                 
-                <button class="absolute left-3 text-stone-400 hover:text-white"><i class="fa fa-chevron-left text-xl"></i></button>
-                <div class="text-center relative z-10 px-6">
-                    <h2 class="text-3xl font-serif font-bold tracking-widest text-white drop-shadow-md">WEBSITE</h2>
-                    <p class="text-xs uppercase tracking-[0.3em] text-amber-400 font-semibold mt-1">New Website</p>
+                <div class="absolute bottom-5 left-5 right-5">
+                    <span class="bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[9px] px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">AI Quant Engine Active</span>
+                    <h2 class="text-2xl font-extrabold tracking-tight text-white mt-1">Decentralized Assets Hub</h2>
+                    <p class="text-[11px] text-slate-400 mt-0.5">Automate and monitor crypto node distribution contracts.</p>
                 </div>
-                <button class="absolute right-3 text-stone-400 hover:text-white"><i class="fa fa-chevron-right text-xl"></i></button>
             </div>
 
-            <div class="bg-gradient-to-r from-amber-500 to-amber-600 rounded-xl p-2.5 px-4 text-stone-950 font-bold text-xs flex items-center gap-2 mb-4 shadow-lg border border-amber-400">
-                <i class="fa fa-volume-high animate-pulse"></i>
-                <marquee scrollamount="4" class="font-extrabold uppercase tracking-wide">(WDR) DEVELOPER BY RAKIB</marquee>
+            <div class="bg-cyan-500/5 rounded-xl p-3 px-4 text-cyan-400 text-xs flex items-center gap-3 border border-cyan-500/10">
+                <i class="fa fa-bell-on text-sm animate-pulse"></i>
+                <marquee scrollamount="4" class="font-medium">Welcome to the premium dashboard. Minimum withdrawal is fixed at 100 TK. Instant deposits checking active. Developed by Rakib.</marquee>
             </div>
 
-            <div class="grid grid-cols-2 gap-3 mb-6">
-                <button onclick="showPage('deposit', document.getElementById('nav-wallet'))" class="btn-primary py-3.5 rounded-xl font-black text-xs tracking-wider shadow-lg uppercase">Deposit Hub</button>
-                <button onclick="goToWithdraw()" class="bg-stone-900 border border-stone-800 text-amber-500 py-3.5 rounded-xl font-black text-xs tracking-wider active:scale-95 transition uppercase">Withdrawal</button>
+            <!-- Dashboard Analytics / Status Cards -->
+            <div class="grid grid-cols-2 gap-3">
+                <div class="royal-card p-4 text-left">
+                    <span class="text-[10px] uppercase font-bold text-slate-500">Node Cluster Status</span>
+                    <p class="text-sm font-bold text-emerald-400 mt-1"><i class="fa fa-circle-dot mr-1 animate-pulse"></i> Operational</p>
+                </div>
+                <div class="royal-card p-4 text-left">
+                    <span class="text-[10px] uppercase font-bold text-slate-500">Security Index</span>
+                    <p class="text-sm font-bold text-cyan-400 mt-1"><i class="fa fa-shield-check mr-1"></i> 100% Verified</p>
+                </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-3 mb-6">
-                
-                <div class="space-y-3 flex flex-col justify-between">
-                    <div class="gold-card p-4 text-center flex flex-col items-center justify-center min-h-[110px]">
-                        <span class="text-xs font-bold text-stone-400 mb-2">Help Center</span>
-                        <div class="text-amber-500 text-3xl mb-1"><i class="fa fa-handshake"></i></div>
+            <!-- Main App Utility Navigation Grid -->
+            <div class="bg-slate-950/40 border border-slate-900 p-4 rounded-3xl">
+                <p class="text-[11px] text-slate-500 font-bold uppercase tracking-widest mb-3 ml-1">System Utilities</p>
+                <div class="grid grid-cols-3 gap-3">
+                    <div onclick="showPage('deposit', document.getElementById('nav-deposit'))" class="royal-card p-4 text-center cursor-pointer">
+                        <div class="text-cyan-400 text-xl mb-1"><i class="fa fa-money-bill-transfer"></i></div>
+                        <span class="text-[10px] font-bold text-slate-400 block">Deposit</span>
                     </div>
-                    <div class="gold-card p-4 text-center flex flex-col items-center justify-center min-h-[110px]">
-                        <span class="text-xs font-bold text-stone-400 mb-2">Blog</span>
-                        <div class="text-amber-500 text-3xl mb-1"><i class="fa fa-globe"></i></div>
+                    <div onclick="showPage('withdraw', document.getElementById('nav-withdraw'))" class="royal-card p-4 text-center cursor-pointer">
+                        <div class="text-cyan-400 text-xl mb-1"><i class="fa fa-wallet"></i></div>
+                        <span class="text-[10px] font-bold text-slate-400 block">Withdraw</span>
                     </div>
-                </div>
-
-                <div class="gold-card p-5 flex flex-col items-center justify-center text-center">
-                    <span class="text-xs font-bold text-stone-400 mb-4">Invite Friends</span>
-                    <div class="text-amber-500 text-5xl mb-3"><i class="fa fa-users"></i></div>
-                    <span class="text-[9px] text-amber-500/60 font-medium uppercase tracking-wider">Earn Referral Bonus</span>
-                </div>
-
-                <div class="gold-card p-4 text-center flex flex-col items-center justify-center min-h-[110px]">
-                    <span class="text-xs font-bold text-stone-400 mb-2">Video Tutorial</span>
-                    <div class="text-amber-500 text-3xl mb-1"><i class="fa fa-video"></i></div>
-                </div>
-                <div class="gold-card p-4 text-center flex flex-col items-center justify-center min-h-[110px]">
-                    <span class="text-xs font-bold text-stone-400 mb-2">About Us!</span>
-                    <div class="text-amber-500 text-3xl mb-1"><i class="fa fa-circle-info"></i></div>
-                </div>
-            </div>
-
-            <div class="w-full bg-gradient-to-r from-rose-400 via-pink-400 to-amber-200 rounded-2xl p-4 text-stone-900 flex items-center justify-between shadow-lg relative overflow-hidden mb-6">
-                <div class="z-10">
-                    <h4 class="font-black text-sm uppercase tracking-wider">Share & Reward</h4>
-                    <p class="text-[10px] font-bold opacity-80">Invite members to build premium circuit network</p>
-                </div>
-                <div class="text-3xl z-10 text-rose-600"><i class="fa fa-bullhorn animate-bounce"></i></div>
-                <div class="absolute -right-4 -bottom-4 w-20 h-20 bg-white/10 rounded-full blur-xl"></div>
-            </div>
-
-            <h3 class="font-black text-amber-500 mb-4 ml-1 uppercase text-xs tracking-widest border-l-2 border-amber-500 pl-2">Available Nodes</h3>
-            <div id="planList" class="grid grid-cols-2 gap-3"></div>
-        </div>
-
-        <div id="tasks" class="page p-5">
-            <div class="gold-card p-8 shadow-sm text-center mb-8">
-                <div class="w-16 h-16 bg-amber-500/10 rounded-2xl flex items-center justify-center mx-auto mb-4 text-amber-500 text-2xl border border-amber-500/20">
-                    <i class="fa fa-calendar-check"></i>
-                </div>
-                <h2 class="font-black text-stone-200 text-2xl tracking-tight">Work Station</h2>
-                <div class="mt-2 inline-flex items-center gap-2 bg-amber-500/20 text-amber-400 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider border border-amber-500/30">Tasks Reset Every 24h</div>
-            </div>
-            <div id="taskBlocks" class="space-y-6"></div>
-            <p id="noTaskMsg" class="text-center text-stone-500 text-sm py-20 italic font-medium">No active plans found.</p>
-        </div>
-
-        <div id="deposit" class="page p-5">
-            <div class="gold-card p-6 shadow-sm">
-                <div class="flex p-1.5 bg-stone-900 rounded-2xl mb-8 border border-stone-800">
-                    <div id="tabDep" onclick="toggleWalletTab('dep')" class="wallet-tab flex-1 text-center active">Deposit</div>
-                    <div id="tabWit" onclick="toggleWalletTab('wit')" class="wallet-tab flex-1 text-center">Withdraw</div>
-                </div>
-
-                <div id="walletDepSection">
-                    <div class="bg-stone-950 p-6 rounded-3xl mb-8 relative overflow-hidden border border-stone-800">
-                        <p class="text-[10px] font-bold text-stone-500 uppercase tracking-[0.2em] mb-2">Admin Payment Number</p>
-                        <div class="flex justify-between items-center">
-                            <span id="adminDisplayNum" class="font-black text-xl text-white tracking-widest">017XXXXXXXX</span>
-                            <button onclick="copyNum()" class="bg-amber-600 text-white w-10 h-10 rounded-xl active:scale-90 transition"><i class="fa fa-copy text-sm"></i></button>
-                        </div>
+                    <div onclick="showPage('vip', document.getElementById('nav-vip'))" class="royal-card p-4 text-center cursor-pointer">
+                        <div class="text-cyan-400 text-xl mb-1"><i class="fa fa-crown"></i></div>
+                        <span class="text-[10px] font-bold text-slate-400 block">VIP Nodes</span>
                     </div>
-                    <form onsubmit="submitDeposit(event)" class="space-y-4">
-                        <select id="depMethod" required class="w-full rounded-2xl p-4 text-sm font-semibold outline-none focus:ring-2 ring-amber-500/20">
-                            <option value="">Choose Method (bKash/Nagad)</option>
-                            <option value="bKash">bKash</option>
-                            <option value="Nagad">Nagad</option>
-                        </select>
-                        <input type="number" id="depAmount" placeholder="Amount (৳)" required class="w-full rounded-2xl p-4 text-sm font-semibold outline-none focus:ring-2 ring-amber-500/20">
-                        <input type="text" id="depTrx" placeholder="Transaction ID (TrxID)" required class="w-full rounded-2xl p-4 text-sm font-semibold outline-none focus:ring-2 ring-amber-500/20">
-                        <button type="submit" id="depBtn" class="w-full btn-primary py-5 shadow-xl mt-4 text-sm uppercase tracking-widest">Submit Deposit</button>
-                    </form>
-                </div>
-
-                <div id="walletWitSection" style="display: none;">
-                    <div class="bg-gradient-to-br from-stone-900 to-stone-950 p-7 rounded-[2rem] text-white mb-8 shadow-2xl border border-stone-800">
-                        <p class="text-[10px] opacity-60 uppercase font-black tracking-widest mb-1 text-stone-400">Withdrawable Balance</p>
-                        <h2 id="withdrawBalDisplay" class="text-4xl font-black tracking-tighter text-amber-500">৳0.00</h2>
+                    <div onclick="showPage('refer', document.getElementById('nav-refer'))" class="royal-card p-4 text-center cursor-pointer">
+                        <div class="text-cyan-400 text-xl mb-1"><i class="fa fa-user-plus"></i></div>
+                        <span class="text-[10px] font-bold text-slate-400 block">Referral</span>
                     </div>
-                    <form onsubmit="submitWithdraw(event)" class="space-y-4">
-                        <select id="witMethod" required class="w-full rounded-2xl p-4 text-sm font-semibold outline-none">
-                            <option value="">Receive Via</option>
-                            <option value="bKash">bKash</option>
-                            <option value="Nagad">Nagad</option>
-                        </select>
-                        <input type="tel" id="witPhone" placeholder="Account Number" required class="w-full rounded-2xl p-4 text-sm font-semibold outline-none focus:ring-2 ring-amber-500/20">
-                        <input type="number" id="witAmount" placeholder="Amount (৳)" required class="w-full rounded-2xl p-4 text-sm font-semibold outline-none focus:ring-2 ring-amber-500/20">
-                        <button type="submit" id="witBtn" class="w-full btn-primary py-5 shadow-xl mt-4 text-sm uppercase tracking-widest">Request Payment</button>
-                    </form>
+                    <div onclick="showPage('support', document.getElementById('nav-support'))" class="royal-card p-4 text-center cursor-pointer">
+                        <div class="text-cyan-400 text-xl mb-1"><i class="fa fa-headset"></i></div>
+                        <span class="text-[10px] font-bold text-slate-400 block">Support</span>
+                    </div>
+                    <div onclick="showPage('account', document.getElementById('nav-account'))" class="royal-card p-4 text-center cursor-pointer">
+                        <div class="text-cyan-400 text-xl mb-1"><i class="fa fa-user-gear"></i></div>
+                        <span class="text-[10px] font-bold text-slate-400 block">Profile</span>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div id="account" class="page p-5">
-            <div class="gold-card p-10 text-center shadow-sm">
-                <div class="w-24 h-24 bg-stone-950 rounded-[2.5rem] flex items-center justify-center mx-auto mb-6 border border-amber-500/20 shadow-inner">
-                    <i class="fa fa-user-tie text-amber-500 text-4xl"></i>
+        <!-- 2. PAGE: MINING TASKS -->
+        <div id="tasks" class="page p-5 max-w-md mx-auto space-y-4">
+            <div class="royal-card p-6 text-center">
+                <div class="w-14 h-14 bg-cyan-500/10 rounded-2xl flex items-center justify-center mx-auto mb-3 text-cyan-400 text-xl border border-cyan-500/20">
+                    <i class="fa fa-terminal"></i>
                 </div>
-                <h2 id="accNameDisplay" class="font-black text-2xl text-stone-200 tracking-tight">Loading...</h2>
-                <div id="accPhone" class="inline-block mt-1 bg-stone-900 text-stone-400 px-4 py-1 rounded-full text-[10px] font-bold border border-stone-800">ID: 01xxxxxxxxx</div>
+                <h2 class="font-bold text-lg text-white">Quantum Core Mining</h2>
+                <div class="mt-1 inline-block bg-slate-950 text-slate-400 px-3 py-1 rounded-full text-[10px] font-medium border border-slate-800">Frequency Reset: 24h Cycle</div>
+            </div>
+            <div id="taskBlocks" class="space-y-3"></div>
+            <p id="noTaskMsg" class="text-center text-slate-500 text-sm py-16 italic">No cluster nodes acquired yet. Buy a plan inside VIP section to trigger tasks.</p>
+        </div>
+
+        <!-- 3. PAGE: DEPOSIT ONLY -->
+        <div id="deposit" class="page p-5 max-w-md mx-auto space-y-4">
+            <div class="royal-card p-5 space-y-4">
+                <h3 class="font-bold text-base text-white border-b border-slate-900 pb-2"><i class="fa fa-money-bill-wave text-cyan-400 mr-2"></i>Recharge Vault Portal</h3>
                 
-                <div class="grid grid-cols-2 gap-4 mt-10">
-                    <div class="bg-stone-900 p-5 rounded-3xl border border-stone-800">
-                        <p class="text-[9px] font-black text-stone-500 uppercase mb-1">Total Assets</p>
-                        <p id="accBalance" class="text-amber-500 font-black text-lg">৳0.00</p>
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                    <p class="text-[10px] font-medium text-slate-500 uppercase tracking-wider mb-1">Official Merchant Number</p>
+                    <div class="flex justify-between items-center">
+                        <span id="adminDisplayNum" class="font-bold text-lg text-cyan-400 tracking-wider">017XXXXXXXX</span>
+                        <button onclick="copyNum()" class="text-slate-400 hover:text-white p-2"><i class="fa fa-copy"></i></button>
                     </div>
-                    <div class="bg-stone-900 p-5 rounded-3xl border border-stone-800">
-                        <p class="text-[9px] font-black text-stone-500 uppercase mb-1">Account Status</p>
-                        <p class="text-green-500 font-black text-lg italic">Verified</p>
+                </div>
+
+                <form onsubmit="submitDeposit(event)" class="space-y-3">
+                    <select id="depMethod" required class="w-full rounded-xl p-3.5 text-xs outline-none">
+                        <option value="">Select Gateway Platform</option>
+                        <option value="bKash">bKash (Personal)</option>
+                        <option value="Nagad">Nagad (Personal)</option>
+                    </select>
+                    <input type="number" id="depAmount" placeholder="Deposit Amount (৳)" required class="w-full rounded-xl p-3.5 text-xs outline-none">
+                    <input type="text" id="depTrx" placeholder="Enter Reference Transaction ID (TrxID)" required class="w-full rounded-xl p-3.5 text-xs outline-none">
+                    <button type="submit" class="w-full btn-royal py-4 text-xs uppercase tracking-wider">Submit Verification Request</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 4. PAGE: WITHDRAW ONLY -->
+        <div id="withdraw" class="page p-5 max-w-md mx-auto space-y-4">
+            <div class="royal-card p-5 space-y-4">
+                <h3 class="font-bold text-base text-white border-b border-slate-900 pb-2"><i class="fa fa-wallet text-cyan-400 mr-2"></i>Asset Payout Terminal</h3>
+                
+                <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 text-center">
+                    <p class="text-[10px] uppercase font-bold tracking-widest text-slate-500">Withdrawable Vault Assets</p>
+                    <h2 id="withdrawBalDisplay" class="text-3xl font-bold tracking-tight text-cyan-400 mt-1">৳0.00</h2>
+                </div>
+
+                <form onsubmit="submitWithdraw(event)" class="space-y-3">
+                    <select id="witMethod" required class="w-full rounded-xl p-3.5 text-xs outline-none">
+                        <option value="">Choose Payout Gateway</option>
+                        <option value="bKash">bKash</option>
+                        <option value="Nagad">Nagad</option>
+                    </select>
+                    <input type="tel" id="witPhone" placeholder="Receiving Wallet Account Number" required class="w-full rounded-xl p-3.5 text-xs outline-none">
+                    <input type="number" id="witAmount" placeholder="Amount (Minimum Limit ৳100)" required class="w-full rounded-xl p-3.5 text-xs outline-none">
+                    <button type="submit" class="w-full btn-royal py-4 text-xs uppercase tracking-wider">Confirm Liquidation Settlement</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 5. PAGE: VIP NODES PACKAGES ONLY -->
+        <div id="vip" class="page p-5 max-w-md mx-auto space-y-4">
+            <div class="flex justify-between items-center border-l-4 border-cyan-500 pl-2 mb-2">
+                <h3 class="font-bold text-white uppercase text-xs tracking-widest">Premium VIP Investment Nodes</h3>
+                <span class="text-[9px] bg-slate-900 text-slate-400 border border-slate-800 px-2 py-0.5 rounded-md">Live Nodes</span>
+            </div>
+            <div id="planList" class="grid grid-cols-1 gap-4"></div>
+        </div>
+
+        <!-- 6. PAGE: REFER SYSTEM ONLY -->
+        <div id="refer" class="page p-5 max-w-md mx-auto space-y-4">
+            <div class="royal-card p-6 space-y-4">
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-cyan-500/10 rounded-full flex items-center justify-center mx-auto text-cyan-400 mb-2 border border-cyan-500/20">
+                        <i class="fa fa-share-nodes text-lg"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-white">Affiliate Architecture</h3>
+                    <p class="text-xs text-slate-400 mt-1">Invite new clients to deploy nodes and earn 3-Tier direct commission payload structure.</p>
+                </div>
+                
+                <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-1">
+                    <p class="text-[10px] font-bold text-amber-400 uppercase tracking-wider"><i class="fa fa-link mr-1"></i> Your Unique Referral Code Link</p>
+                    <div class="flex justify-between items-center pt-1">
+                        <span id="refLinkDisplay" class="text-[11px] text-slate-400 truncate pr-2">Generating Link Asset...</span>
+                        <button onclick="copyRefLink()" class="bg-cyan-500 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold shrink-0 shadow-lg">Copy Link</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. PAGE: SUPPORT ONLY -->
+        <div id="support" class="page p-5 max-w-md mx-auto space-y-4">
+            <div class="royal-card p-6 space-y-4">
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-cyan-500/10 rounded-full flex items-center justify-center mx-auto text-cyan-400 mb-2 border border-cyan-500/20">
+                        <i class="fa fa-headset text-lg"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-white">Technical Help Desk</h3>
+                    <p class="text-xs text-slate-400 mt-1">Facing gateway or operation synchronization failure? Get live developer support instantly.</p>
+                </div>
+
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
+                    <div>
+                        <p class="text-xs font-bold text-white">Direct Phone Hotlink</p>
+                        <p class="text-[10px] text-slate-400 mt-0.5">Call admin directly for swift assistance</p>
+                    </div>
+                    <a id="supportCallLink" href="tel:" class="bg-slate-900 border border-slate-800 text-cyan-400 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 shadow-inner">
+                        <i class="fa fa-phone text-[10px]"></i> Call Admin
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 8. PAGE: ACCOUNT PROFILE -->
+        <div id="account" class="page p-5 max-w-md mx-auto">
+            <div class="royal-card p-6 text-center space-y-6">
+                <div>
+                    <div class="w-20 h-20 bg-slate-950 rounded-full flex items-center justify-center mx-auto mb-3 border border-cyan-500/20 shadow-xl">
+                        <i class="fa fa-user-astronaut text-cyan-400 text-3xl"></i>
+                    </div>
+                    <h2 id="accNameDisplay" class="font-bold text-xl text-white">Syncing Account...</h2>
+                    <div id="accPhone" class="inline-block mt-1 bg-slate-950 text-slate-400 px-3 py-0.5 rounded-full text-[10px] font-medium border border-slate-800">ID: 01xxxxxxxxx</div>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-3 text-left">
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                        <p class="text-[9px] font-bold text-slate-500 uppercase">Settled Balance</p>
+                        <p id="accBalance" class="text-cyan-400 font-bold text-base mt-0.5">৳0.00</p>
+                    </div>
+                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                        <p class="text-[9px] font-bold text-slate-500 uppercase">Verification</p>
+                        <p class="text-emerald-400 font-bold text-sm mt-0.5"><i class="fa fa-badge-check text-[10px]"></i> VIP Tier 1</p>
                     </div>
                 </div>
                 
-                <div class="space-y-3 mt-8">
-                    <button onclick="openHistory()" class="w-full bg-amber-500/10 text-amber-400 py-5 rounded-2xl font-black text-xs flex items-center justify-center gap-3 border border-amber-500/20">
-                        <i class="fa fa-receipt text-base"></i> TRANSACTION RECORDS
+                <div class="space-y-2.5">
+                    <button onclick="openHistory()" class="w-full bg-slate-950 text-slate-300 py-4 rounded-xl text-xs font-bold flex items-center justify-center gap-2 border border-slate-800 hover:text-cyan-400">
+                        <i class="fa fa-receipt text-cyan-400"></i> TRANSACTION RECORDS
                     </button>
-                    <button onclick="logout()" class="w-full bg-stone-900 text-rose-500 py-5 rounded-2xl font-black text-xs uppercase tracking-widest border border-stone-800">Logout Account</button>
+                    <button onclick="logout()" class="w-full bg-red-950/20 text-red-400 py-4 rounded-xl text-xs font-bold border border-red-900/20 uppercase tracking-wider">Disconnect Secure Session</button>
                 </div>
             </div>
         </div>
 
-        <div class="fixed bottom-0 w-full glass flex justify-around items-center py-4 border-t border-amber-500/20 z-50 rounded-t-[2rem] px-2 shadow-[0_-10px_25px_rgba(0,0,0,0.5)]">
-            <button id="nav-home" onclick="showPage('home', this)" class="nav-btn nav-active flex flex-col items-center gap-1 transition-all w-14 text-stone-500">
-                <i class="fa fa-house text-lg"></i>
-                <span class="text-[10px] font-bold uppercase tracking-tight">Home</span>
+        <!-- Sticky Bottom Tab Navigation Docker Dashboard -->
+        <div class="fixed bottom-0 left-0 right-0 glass-blur flex justify-around items-center py-3 border-t border-slate-900 z-50 rounded-t-3xl shadow-2xl max-w-md mx-auto px-2">
+            <button id="nav-home" onclick="showPage('home', this)" class="nav-btn nav-active flex flex-col items-center gap-1 text-slate-500 transition-all w-12">
+                <i class="fa fa-compass text-base"></i>
+                <span class="text-[9px] font-medium tracking-tight">Main</span>
             </button>
-            <button id="nav-tasks" onclick="showPage('tasks', this)" class="nav-btn flex flex-col items-center gap-1 transition-all w-14 text-stone-500">
-                <i class="fa fa-gift text-lg"></i>
-                <span class="text-[10px] font-bold uppercase tracking-tight">Task</span>
+            <button id="nav-tasks" onclick="showPage('tasks', this)" class="nav-btn flex flex-col items-center gap-1 text-slate-500 transition-all w-12">
+                <i class="fa fa-microchip text-base"></i>
+                <span class="text-[9px] font-medium tracking-tight">Mining</span>
             </button>
-            
-            <div onclick="showPage('home', document.getElementById('nav-home'))" class="relative -top-5 bg-gradient-to-b from-amber-300 via-amber-500 to-amber-700 w-14 h-14 rounded-full flex items-center justify-center border-4 border-stone-950 shadow-xl shadow-amber-900/40 active:scale-95 transition cursor-pointer">
-                <i class="fa fa-award text-stone-950 text-2xl"></i>
-                <div class="absolute -bottom-1 bg-red-600 text-white text-[7px] font-black px-1.5 py-0.5 rounded-full uppercase tracking-tighter scale-90 border border-stone-950">PRO</div>
-            </div>
-            
-            <button id="nav-wallet" onclick="showPage('deposit', this)" class="nav-btn flex flex-col items-center gap-1 transition-all w-14 text-stone-500">
-                <i class="fa fa-wallet text-lg"></i>
-                <span class="text-[10px] font-bold uppercase tracking-tight">Wallet</span>
+            <button id="nav-deposit" onclick="showPage('deposit', this)" class="nav-btn flex flex-col items-center gap-1 text-slate-500 transition-all w-12">
+                <i class="fa fa-money-bill-transfer text-base"></i>
+                <span class="text-[9px] font-medium tracking-tight">Recharge</span>
             </button>
-            <button id="nav-account" onclick="showPage('account', this)" class="nav-btn flex flex-col items-center gap-1 transition-all w-14 text-stone-500">
-                <i class="fa fa-circle-user text-lg"></i>
-                <span class="text-[10px] font-bold uppercase tracking-tight">Profile</span>
+            <button id="nav-withdraw" onclick="showPage('withdraw', this)" class="nav-btn flex flex-col items-center gap-1 text-slate-500 transition-all w-12">
+                <i class="fa fa-wallet text-base"></i>
+                <span class="text-[9px] font-medium tracking-tight">Payout</span>
+            </button>
+            <button id="nav-vip" onclick="showPage('vip', this)" class="nav-btn flex flex-col items-center gap-1 text-slate-500 transition-all w-12">
+                <i class="fa fa-crown text-base"></i>
+                <span class="text-[9px] font-medium tracking-tight">VIP</span>
+            </button>
+            <button id="nav-refer" onclick="showPage('refer', this)" class="nav-btn flex flex-col items-center gap-1 text-slate-500 transition-all w-12">
+                <i class="fa fa-share-nodes text-base"></i>
+                <span class="text-[9px] font-medium tracking-tight">Refer</span>
+            </button>
+            <button id="nav-support" onclick="showPage('support', this)" class="nav-btn flex flex-col items-center gap-1 text-slate-500 transition-all w-12 hidden">
+                <i class="fa fa-headset text-base"></i>
+                <span class="text-[9px] font-medium tracking-tight">Help</span>
+            </button>
+            <button id="nav-account" onclick="showPage('account', this)" class="nav-btn flex flex-col items-center gap-1 text-slate-500 transition-all w-12">
+                <i class="fa fa-user-gear text-base"></i>
+                <span class="text-[9px] font-medium tracking-tight">Identity</span>
             </button>
         </div>
     </div>
 
+    <!-- Firebase System Libraries Core integrations -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
@@ -320,8 +409,16 @@
             document.getElementById('mainApp').style.display = 'block';
             document.getElementById('accPhone').innerText = "ID: " + phone;
 
+            // Generate Network URL Link Code assets 
+            const appUrl = window.location.href.split('?')[0];
+            const refLink = `${appUrl}?ref=${phone}`;
+            document.getElementById('refLinkDisplay').innerText = refLink;
+
+            // Master Admin Number Streaming 
             db.ref('appSettings/adminPhone').on('value', s => {
-                document.getElementById('adminDisplayNum').innerText = s.val() || "017XXXXXXXX";
+                const num = s.val() || "017XXXXXXXX";
+                document.getElementById('adminDisplayNum').innerText = num;
+                document.getElementById('supportCallLink').href = "tel:" + num;
             });
 
             db.ref('plans').on('value', s => {
@@ -335,7 +432,7 @@
                 document.getElementById('userBalance').innerText = bal;
                 document.getElementById('accBalance').innerText = bal;
                 document.getElementById('withdrawBalDisplay').innerText = bal;
-                document.getElementById('accNameDisplay').innerText = userData.name || "User Name";
+                document.getElementById('accNameDisplay').innerText = userData.name || "VIP Core Client";
                 checkAndResetTasks();
                 renderPlansList();
                 renderTaskBlocks();
@@ -345,28 +442,28 @@
         function openHistory() {
             document.getElementById('historyOverlay').style.display = 'block';
             const list = document.getElementById('historyList');
-            list.innerHTML = '<div class="text-center py-10"><i class="fa fa-spinner fa-spin text-amber-500 text-3xl"></i></div>';
+            list.innerHTML = '<div class="text-center py-8"><i class="fa fa-spinner fa-spin text-cyan-400 text-2xl"></i></div>';
             let records = [];
             db.ref('deposits').orderByChild('user').equalTo(currentUser).once('value', s => {
                 s.forEach(child => { records.push({ ...child.val(), type: 'Deposit' }); });
                 db.ref('withdraws').orderByChild('user').equalTo(currentUser).once('value', sw => {
                     sw.forEach(child => { records.push({ ...child.val(), type: 'Withdraw' }); });
                     if(records.length === 0) {
-                        list.innerHTML = '<p class="text-center text-stone-500 italic py-10 font-medium">No records found.</p>';
+                        list.innerHTML = '<p class="text-center text-slate-500 italic py-10 text-xs">No entries processed inside current block.</p>';
                     } else {
                         records.sort((a, b) => new Date(b.time) - new Date(a.time));
                         list.innerHTML = records.map(r => `
-                            <div class="bg-stone-900 p-5 rounded-[1.5rem] border border-stone-800 shadow-sm">
-                                <div class="flex justify-between items-start mb-2">
-                                    <span class="font-black text-xs uppercase ${r.type === 'Deposit' ? 'text-amber-500' : 'text-orange-500'}">${r.type}</span>
-                                    <span class="text-[9px] font-black px-3 py-1 rounded-full ${r.status === 'Pending' ? 'bg-amber-500/10 text-amber-400' : 'bg-green-500/10 text-green-400'}">${r.status.toUpperCase()}</span>
+                            <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+                                <div class="flex justify-between items-start mb-1">
+                                    <span class="font-bold text-xs ${r.type === 'Deposit' ? 'text-cyan-400' : 'text-amber-500'}">${r.type}</span>
+                                    <span class="text-[9px] font-bold px-2 py-0.5 rounded-full ${r.status === 'Pending' ? 'bg-amber-500/10 text-amber-400' : 'bg-emerald-500/10 text-emerald-400'}">${r.status.toUpperCase()}</span>
                                 </div>
                                 <div class="flex justify-between items-end">
                                     <div>
-                                        <p class="text-[10px] text-stone-500 font-bold uppercase tracking-tighter">${r.time}</p>
-                                        <p class="text-[10px] text-stone-400 mt-1 font-semibold">${r.method} ${r.trx ? '• '+r.trx : ''}</p>
+                                        <p class="text-[10px] text-slate-500">${r.time}</p>
+                                        <p class="text-[10px] text-slate-400 mt-0.5">${r.method} ${r.trx ? '• '+r.trx : ''}</p>
                                     </div>
-                                    <p class="font-black text-xl text-stone-200">৳${r.amount}</p>
+                                    <p class="font-bold text-sm text-zinc-200">৳${r.amount}</p>
                                 </div>
                             </div>
                         `).join('');
@@ -376,21 +473,6 @@
         }
 
         function closeHistory() { document.getElementById('historyOverlay').style.display = 'none'; }
-        function goToWithdraw() { showPage('deposit', document.getElementById('nav-wallet')); toggleWalletTab('wit'); }
-
-        function toggleWalletTab(type) {
-            if(type === 'dep') {
-                document.getElementById('walletDepSection').style.display = 'block';
-                document.getElementById('walletWitSection').style.display = 'none';
-                document.getElementById('tabDep').classList.add('active');
-                document.getElementById('tabWit').classList.remove('active');
-            } else {
-                document.getElementById('walletDepSection').style.display = 'none';
-                document.getElementById('walletWitSection').style.display = 'block';
-                document.getElementById('tabWit').classList.add('active');
-                document.getElementById('tabDep').classList.remove('active');
-            }
-        }
 
         function renderPlansList() {
             const list = document.getElementById('planList');
@@ -402,23 +484,30 @@
                 const dailyIncome = plan.reward * plan.tasks;
 
                 list.innerHTML += `
-                    <div class="gold-card p-4 flex flex-col justify-between">
-                        <div>
-                            <span class="bg-amber-600 text-stone-950 text-[9px] px-3 py-1 rounded-full font-black uppercase tracking-wider mb-3 inline-block">${plan.name}</span>
-                            <div class="flex flex-wrap gap-1 mt-2">
-                                <span class="reward-tag">Each: ${plan.reward}TK</span>
-                                <span class="validity-tag">${plan.validity || 30}D</span>
+                    <div class="royal-card p-5 flex flex-col justify-between bg-slate-900/30">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <span class="bg-cyan-500 text-slate-950 text-[9px] px-2.5 py-1 rounded-md font-bold uppercase tracking-wider mb-2 inline-block">${plan.name}</span>
+                                <h4 class="text-xl font-bold text-white mt-1">৳${plan.price} <span class="text-xs text-slate-500 font-normal">Activation</span></h4>
                             </div>
-                            <div class="mt-2 text-[11px] font-bold text-stone-400">
-                                <i class="fa fa-money-bill-wave text-amber-500 mr-1"></i>Daily: <span class="text-amber-500">${dailyIncome}TK</span>
+                            <div class="text-right">
+                                <span class="text-[10px] bg-slate-950 text-slate-400 border border-slate-800 px-2 py-1 rounded-md font-bold"><i class="fa fa-shield mr-1"></i>${plan.validity || 30} Days</span>
                             </div>
-                            <p class="text-2xl font-black text-stone-200 tracking-tighter mt-2">৳${plan.price}</p>
-                            <p class="text-[9px] text-amber-400 font-black mt-1 uppercase italic"><i class="fa fa-bolt"></i> ${plan.tasks} Tasks Daily</p>
                         </div>
-                        <div class="mt-4">
+                        <div class="grid grid-cols-2 gap-2 my-4 bg-slate-950/70 p-3 rounded-xl border border-slate-800">
+                            <div>
+                                <p class="text-[9px] text-slate-500 uppercase">Daily Output</p>
+                                <p class="text-xs font-bold text-emerald-400">৳${dailyIncome} TK</p>
+                            </div>
+                            <div>
+                                <p class="text-[9px] text-slate-500 uppercase">Processes</p>
+                                <p class="text-xs font-bold text-cyan-400">${plan.tasks} Ops / Day</p>
+                            </div>
+                        </div>
+                        <div>
                             ${isActive ? 
-                                `<button class="w-full bg-green-600 text-white py-2.5 rounded-xl text-[10px] font-black uppercase"><i class="fa fa-check"></i> Active</button>` : 
-                                `<button onclick="buyPlan('${key}')" class="w-full btn-primary py-2.5 text-[10px] uppercase tracking-wider">Buy Node</button>`
+                                `<button class="w-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 py-3 rounded-xl text-xs font-bold uppercase tracking-wide cursor-not-allowed"><i class="fa fa-square-check mr-1"></i> Running Contract</button>` : 
+                                `<button onclick="buyPlan('${key}')" class="w-full btn-royal py-3 text-xs uppercase tracking-wide">Acquire Server Node</button>`
                             }
                         </div>
                     </div>`;
@@ -427,12 +516,12 @@
 
         function buyPlan(planKey) {
             const plan = activePlansData[planKey];
-            if(userData.balance < plan.price) return alert("অপ্রতুল ব্যালেন্স! আগে রিচার্জ করুন।");
-            if(confirm(`${plan.name} সচল করতে চান?`)) {
+            if(userData.balance < plan.price) return alert("অপ্রতুল ফান্ড! অনুগ্রহ করে ওয়ালেট ব্যালেন্স রিচার্জ করুন।");
+            if(confirm(`আপনি কি নিশ্চিতভাবে ${plan.name} নোডটি সচল করতে চান?`)) {
                 const myPlans = userData.myPlans || {};
                 myPlans[planKey] = { name: plan.name, tasks: plan.tasks, reward: plan.reward, completedToday: 0 };
                 db.ref('users/'+currentUser).update({ balance: userData.balance - plan.price, myPlans: myPlans });
-                alert("প্ল্যানটি সফলভাবে সচল হয়েছে!");
+                alert("আপনার VIP নোডটি সফলভাবে অ্যাক্টিভেট করা হয়েছে!");
             }
         }
 
@@ -443,16 +532,19 @@
             document.getElementById('noTaskMsg').style.display = 'none';
             for(let key in userData.myPlans) {
                 const myPlan = userData.myPlans[key];
-                let blockHtml = `<div class="space-y-4"><div class="flex items-center gap-2 px-2"><div class="w-1 h-4 bg-amber-500 rounded-full"></div><h3 class="font-black text-stone-400 uppercase text-xs tracking-widest">${myPlan.name}</h3></div>`;
+                let blockHtml = `<div class="space-y-2.5">`;
                 for(let i=1; i<=myPlan.tasks; i++) {
                     const isDone = i <= (myPlan.completedToday || 0);
                     blockHtml += `
-                        <div class="bg-stone-900 p-5 rounded-[2rem] flex justify-between items-center border border-stone-800 ${isDone ? 'opacity-40' : 'shadow-sm'}">
-                            <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 ${isDone ? 'bg-green-500/10 text-green-500 border-green-500/20' : 'bg-amber-500/10 text-amber-500 border-amber-500/20'} rounded-2xl flex items-center justify-center border"><i class="fa ${isDone ? 'fa-check-double' : 'fa-play text-xs'}"></i></div>
-                                <div><p class="font-black text-sm text-stone-200">Daily Task 0${i}</p><p class="text-amber-400 text-[10px] font-black">+ ৳${myPlan.reward}</p></div>
+                        <div class="royal-card p-4 flex justify-between items-center bg-slate-900/20 ${isDone ? 'opacity-40 shadow-none' : ''}">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 ${isDone ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-cyan-500/10 text-cyan-400 border-cyan-500/20'} rounded-xl flex items-center justify-center border"><i class="fa ${isDone ? 'fa-check' : 'fa-play text-xs'}"></i></div>
+                                <div>
+                                    <p class="font-bold text-xs text-white">${myPlan.name} - Unit Run #${i}</p>
+                                    <p class="text-emerald-400 text-[10px] font-medium">+ ৳${myPlan.reward} Yield</p>
+                                </div>
                             </div>
-                            <button ${isDone ? 'disabled' : ''} onclick="claimSpecificTask('${key}', ${myPlan.reward})" class="${isDone ? 'bg-stone-800 text-stone-500' : 'bg-amber-500 text-stone-950 font-bold shadow-xl'} px-6 py-2.5 rounded-xl text-[10px] uppercase tracking-widest transition-all">${isDone ? 'Finished' : 'Claim'}</button>
+                            <button ${isDone ? 'disabled' : ''} onclick="claimSpecificTask('${key}', ${myPlan.reward})" class="${isDone ? 'bg-slate-900 text-slate-600' : 'bg-cyan-500 text-white font-bold'} px-4 py-2 rounded-lg text-[10px] uppercase tracking-wider">${isDone ? 'Settled' : 'Execute'}</button>
                         </div>`;
                 }
                 container.innerHTML += blockHtml + `</div>`;
@@ -474,14 +566,14 @@
                 trx: document.getElementById('depTrx').value, 
                 status: 'Pending', 
                 time: new Date().toLocaleString()
-            }).then(() => { alert("আবেদন পাঠানো হয়েছে! এডমিন চেক করে ব্যালেন্স যোগ করে দিবে।"); e.target.reset(); });
+            }).then(() => { alert("আবেদন জমা হয়েছে। খুব শীঘ্রই ব্যালেন্স যুক্ত হবে।"); e.target.reset(); });
         }
 
         function submitWithdraw(e) {
             e.preventDefault();
             const amt = parseInt(document.getElementById('witAmount').value);
-            if(amt > userData.balance) return alert("অপ্রতুল ব্যালেন্স!");
-            if(amt < 100) return alert("নূন্যতম উইথড্র ১০০ টাকা!");
+            if(amt > userData.balance) return alert("ওয়ালেটে পর্যাপ্ত ব্যালেন্স নেই!");
+            if(amt < 100) return alert("সর্বনিম্ন ক্যাশআউট ১০০ টাকা!");
             db.ref('withdraws').push({
                 user: currentUser, amount: amt, 
                 method: document.getElementById('witMethod').value, 
@@ -489,7 +581,7 @@
                 status: 'Pending', time: new Date().toLocaleString()
             }).then(() => {
                 db.ref('users/'+currentUser).update({ balance: userData.balance - amt });
-                alert("উইথড্র রিকোয়েস্ট পাঠানো হয়েছে!");
+                alert("উইথড্র আবেদন সফলভাবে প্রেরিত হয়েছে!");
                 e.target.reset();
             });
         }
@@ -506,18 +598,17 @@
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             if(btn) {
-                document.querySelectorAll('.nav-btn').forEach(b => b.classList.add('text-stone-500'));
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.add('text-slate-500'));
                 document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('nav-active'));
-                btn.classList.remove('text-stone-500'); btn.classList.add('nav-active');
+                btn.classList.remove('text-slate-500'); btn.classList.add('nav-active');
             }
-            if(id === 'deposit') toggleWalletTab('dep');
             window.scrollTo(0, 0);
         }
 
         function toggleAuthMode() { 
-            const isL = document.getElementById('authBtn').innerText === "LOGIN";
-            document.getElementById('authBtn').innerText = isL ? "SIGN UP" : "LOGIN";
-            document.getElementById('authTitle').innerText = isL ? "CREATE ACCOUNT" : "LOGIN TO CTC";
+            const isL = document.getElementById('authBtn').innerText === "CONNECT ACCOUNT";
+            document.getElementById('authBtn').innerText = isL ? "CREATE ACCOUNT" : "CONNECT ACCOUNT";
+            document.getElementById('authTitle').innerText = isL ? "REGISTER MAIN CLUSTER" : "SECURE FIREWALL";
             document.getElementById('authName').classList.toggle('hidden', !isL);
             document.getElementById('authName').required = isL;
         }
@@ -527,22 +618,21 @@
             const name = document.getElementById('authName').value.trim();
             const phone = document.getElementById('authPhone').value.trim();
             const pass = document.getElementById('authPassword').value.trim();
-            const isSignUp = document.getElementById('authBtn').innerText === "SIGN UP";
+            const isSignUp = document.getElementById('authBtn').innerText === "CREATE ACCOUNT";
             if(isSignUp) {
                 db.ref('users/'+phone).once('value', s => {
-                    if(s.exists()) return alert("এই নাম্বার দিয়ে অলরেডি একাউন্ট আছে!");
+                    if(s.exists()) return alert("এই নম্বর দিয়ে অলরেডি অ্যাকাউন্ট তৈরি করা আছে!");
                     db.ref('users/'+phone).set({ name, phone, password: pass, balance: 0 }).then(() => loginSuccess(phone));
                 });
             } else {
-                db.ref('users/'+phone).once('value', s => (s.exists() && s.val().password === pass) ? loginSuccess(phone) : alert("ভুল তথ্য দিয়েছেন!"));
+                db.ref('users/'+phone).once('value', s => (s.exists() && s.val().password === pass) ? loginSuccess(phone) : alert("ভুল মোবাইল নম্বর অথবা অ্যাক্সেস পাসওয়ার্ড!"));
             }
         };
 
         function loginSuccess(p) { localStorage.setItem('ctc_user', p); location.reload(); }
-        function logout() { if(confirm("লগআউট করতে চান?")) { localStorage.clear(); location.reload(); } }
-        function copyNum() { navigator.clipboard.writeText(document.getElementById('adminDisplayNum').innerText); alert("পেমেন্ট নাম্বার কপি করা হয়েছে!"); }
+        function logout() { if(confirm("নিরাপদ সেশনটি বন্ধ করতে চান?")) { localStorage.clear(); location.reload(); } }
+        function copyNum() { navigator.clipboard.writeText(document.getElementById('adminDisplayNum').innerText); alert("মার্চেন্ট নাম্বার কপি সম্পন্ন হয়েছে!"); }
+        function copyRefLink() { navigator.clipboard.writeText(document.getElementById('refLinkDisplay').innerText); alert("রেফারেল ইনভাইট লিংক ক্লিপবোর্ডে কপি হয়েছে!"); }
     </script>
 </body>
 </html>
-
-```
